@@ -10,7 +10,7 @@ Game.LoadingState = class {
     }
     Enter() {
         // enter the level, load images
-        for (let i = 0; i < 6; i++) {
+        for (let i = 0; i < 7; i++) {
             this.Images[i] = {}
         }
 
@@ -27,6 +27,8 @@ Game.LoadingState = class {
         this.Images[4].src = "GameAssets/smallmariosheet.png"
         this.Images[5].name = "title"
         this.Images[5].src = "GameAssets/title.gif"
+        this.Images[6].name = "particles"
+        this.Images[6].src = "GameAssets/particlesheet.png"
 
         Engine.Resources.AddImages(this.Images)
         

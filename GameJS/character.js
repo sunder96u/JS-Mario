@@ -22,7 +22,7 @@ Game.Character = class {
     Move() {
         // create movement
     }
-    CalculatePicture() {
+    CalcPic() {
         // figure out which sprite image to show
     }
     SubMove() {
@@ -40,5 +40,10 @@ Game.Character = class {
     Die() {
         // if die
     }
+    GetCoin() {
+        // if gets coin
+    }
     
 }
+
+Game.Character.prototype = new Game.Sprite(null)

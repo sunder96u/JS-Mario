@@ -88,7 +88,6 @@ Game.Level = class {
         if (x >= this.Width) { return }
         if (y >= this.Height) { return }
         this.Map[x][y] = block
-        console.log(this.Map[x][y])
     }
     SetBlockData(x, y, data) {
         // give the block data
