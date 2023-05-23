@@ -10,7 +10,7 @@ Engine.GameStateContext = class {
         
         if (defaultState != null) {
             this.State = defaultState  // if gamestate is not null, changes to default state
-            this.State.Enter()         // runs the gameState enter
+            this.State.Enter()        // runs the gameState enter
         }
     }
     ChangeState(newState) {
@@ -33,7 +33,7 @@ Engine.GameState = class {
     constructor() {}
     Enter() {}
     Exit() {}
-    Update() {}
-    Draw() {}
-    CheckForChange() {}
+    Update(delta) {}
+    Draw(context) {}
+    CheckForChange(context) {}
 }

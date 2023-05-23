@@ -10,8 +10,8 @@ Engine.Keys = {
     W: 87,
     D: 68,
     S: 83,
-    Space: 5,
-    Enter: 6,
+    Space: 32,
+    Enter: 13,
     Left: 37,
     Up: 38,
     Right: 39,
@@ -21,29 +21,25 @@ Engine.Keys = {
 Engine.KeyInput = {
     Pressed: new Array(),
 
-    Initialize: function() {
+    Initialize: function() {     
         let self = this;
         document.onkeydown = (event) => { self.KeyDownEvent(event)}
         document.onkeyup = (event) => { self.KeyUpEvent(event)}
     },
 
     IsKeyDown: function(key) {
-        if (this.Pressed[key] != null) {
-            console.log(key)
+        if (this.Pressed[key] != null) 
             return this.Pressed[key] 
-        }
         return false
     },
 
     KeyDownEvent: function(event) {
         this.Pressed[event.keyCode] = true
-        console.log(`keys pressed`)
         this.PreventScrolling(event)
     },
 
     KeyUpEvent: function(event) {
         this.Pressed[event.keyCode] = false
-        console.log(event)
         this.PreventScrolling(event)
     },
 

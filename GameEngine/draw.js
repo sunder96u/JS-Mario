@@ -2,7 +2,7 @@
     code by Steven Underwood 2023
 */
 
-Engine.Draw = class {
+Engine.Drawable = class {
     constructor() {
         this.ZOrder = 0
     }
@@ -74,7 +74,7 @@ Engine.Drawer = class {
         let i = 0
         for (i = 0; i < this.Objects.length; i++) {
             if (this.Objects[i].Draw) {
-                this.Object[i].Draw(context, camera)
+                this.Objects[i].Draw(context, camera)
             }
         }
     }

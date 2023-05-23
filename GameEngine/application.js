@@ -7,22 +7,23 @@
 Engine.Application = class {
     constructor() {
         this.canvas = null
-        //this.timer = null
+        this.timer = null
         this.stateContext = null
     }
     Update(delta) {
         this.stateContext.Update(delta)
         this.canvas.BeginDraw()
-        this.stateContext.Draw(this.canvas.BackBufferContext2d)
+        this.stateContext.Draw(this.canvas.BackBufferContext2D)
         this.canvas.EndDraw()
     }
     Initialize(defaultState, resWidth, resHeight) {
         this.canvas = new Engine.GameCanvas()
-        //this.score = new Engine.GameScore()
+        this.timer = new Engine.GameTimer()
         Engine.KeyInput.Initialize()
         this.canvas.Initialize("canvas", resWidth, resHeight)
-        //this.score.UpdateObject = this
+        this.timer.UpdateObject = this
         this.stateContext = new Engine.GameStateContext(defaultState)
-        
+        this.timer.Start()
+                
     }
 }

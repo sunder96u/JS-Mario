@@ -9,7 +9,7 @@
     <title>JavaScript Mario</title>
 </head>
 <body>
-    <canvas id="canvas">
+    <canvas id="canvas" width="640" height="480">
         <p>Canvas did not load, please try again</p>
     </canvas>
 </body>
@@ -21,8 +21,9 @@
 <script src="GameEngine/resources.js"></script>
 <script src="GameEngine/draw.js"></script>
 <script src="GameEngine/state.js"></script>
+<script src="GameEngine/timer.js"></script>
 <script src="GameEngine/camera.js"></script>
-<script src="GameEngine/sprites.js"></script>
+<script src="GameEngine/sprite.js"></script>
 <script src="GameEngine/collideable.js"></script>
 <script src="GameEngine/application.js"></script>
 <!-- Game Code -->
@@ -32,10 +33,11 @@
 <script src="GameJS/level.js"></script>
 <script src="GameJS/enemies.js"></script>
 <script src="GameJS/spriteCuts.js"></script>
+<script src="GameJS/mapState.js"></script>
 <script src="GameJS/titleState.js"></script>
 <script src="GameJS/loadingState.js"></script>
 <script src="GameJS/levelState.js"></script>
-<!-- <script>
+<script>
 $(document).ready(function() { new Engine.Application().Initialize(new Game.LoadingState(), 320, 240)})
-</script>  -->
+</script>
 </html>

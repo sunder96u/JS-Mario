@@ -6,30 +6,55 @@ Game.TitleState = class {
     constructor() {
         this.draw = null
         this.camera = null
+        this.font = null
     }
     Enter() {
-        this.draw = new Engine.DrawManager()
+        this.drawer = new Engine.Drawer()
         this.camera = new Engine.Camera()
 
-        let background = new Image()
-        background.scr="GameAssets/titlebackgroundsheet.png"
+        let backgroundGenerator = new Game.Background(1280, 15, true, Game.LevelType.Title)
+        let backgroundLayer0 = new Game.BackgroundRender(backgroundGenerator.CreateLevel(), 320, 240, 1)
+        backgroundGenerator.SetValues(1280, 15, false, Game.LevelType.Title)
 
-        this.drawManager.Add(background)
+        this.title = new Engine.Sprite()
+        this.title.Image = Engine.Resources.Images["title"]
+        this.title.X = 0, this.title.Y = 120
+
+        this.Logo = Game.SpriteCuts.CreateBlackFont()
+        this.Logo.Strings[0] = { String: "Endless Mario in JavaScript", X: 50, Y: 140 }
+
+        this.font = Game.SpriteCuts.CreateWhiteFont()
+        this.font.Strings[0] = { String: "Press Space to Start", X: 96, Y: 160 }
+
+        this.Instructions = Game.SpriteCuts.CreateYellowFont()
+        this.Instructions.Strings[0] = { String: "How far can you run?", X: 50, Y: 180}
+
+        this.drawer.Add(backgroundLayer0)
+
+        Game.GlobalMapState = new Game.MapState()
+        Game.Character = new Game.Character()
+        Game.Character.Image = Engine.Resources.Images["character"]
     }
     Exit() {
-        this.drawManager.Clear()
-        delete this.drawManager
+        this.drawer.Clear()
+        delete this.drawer
         delete this.camera
+        delete this.font
     }
     Update(delta) {
         this.camera.X += delta * 25
-        this.drawManager.Update(delta)
+        this.drawer.Update(delta)
     }
     Draw(context) {
-        this.drawManager.Draw(context, this.camera)
+        this.drawer.Draw(context, this.camera)
+        context.drawImage(Engine.Resources.Images['title'], 0, 20)
+        this.font.Draw(context, this.camera)
+        this.Logo.Draw(context, this.camera)
+        this.Instructions.Draw(context, this.camera)
     }
     CheckForChange(context) {
-        if (Engine.Keys.IsKeyDown(Engine.Keys.Space)) {
+        if (Engine.KeyInput.IsKeyDown(Engine.Keys.Space)) {
+            console.log('space pressed')
             context.ChangeState(Game.LevelState)
         }
     }
