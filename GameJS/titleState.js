@@ -54,7 +54,7 @@ Game.TitleState = class {
     }
     CheckForChange(context) {
         if (Engine.KeyInput.IsKeyDown(Engine.Keys.Space)) {
-            context.ChangeState(Game.LevelState)
+            context.ChangeState(new Game.LevelState())
         }
     }
 }

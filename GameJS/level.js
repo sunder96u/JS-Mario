@@ -134,7 +134,7 @@ Game.LevelGenerator = class {
         this.Type = 0
     }
     CreateLevel(type, difficulty) {
-        let length = 0, floor = 0, x = o, y = 0, run = 0, level = null
+        let length = 0, floor = 0, x = 0, y = 0, run = 0, level = null
         
         this.Type = type
         this.Difficulty = difficulty
@@ -174,7 +174,7 @@ Game.LevelGenerator = class {
     }
     BuildZone(level, x, maxLength) {
         let t = (Math.random() * this.TotalOdds) | 0, type = 0, i = 0
-        for (i = 0; i < this,Odds.length; i++) {
+        for (i = 0; i < this.Odds.length; i++) {
             if (this.Odds[i] <= t) {
                 type = i
             }
@@ -182,7 +182,7 @@ Game.LevelGenerator = class {
 
         switch (type) {
             case Game.Odds.Straight:
-                return this.BuildStraight(level, x, maxLenght, false)
+                return this.BuildStraight(level, x, maxLength, false)
             case Game.Odds.Tubes:
                 return this.BuildTubes(level, x, maxLength)
             case Game.Odds.Jump:
@@ -288,7 +288,7 @@ Game.LevelGenerator = class {
             length = maxLength
         }
 
-        for (x = xo; x < xo + length; x++) {
+        for (x = x0; x < x0 + length; x++) {
             for (y = 0; y < this.Height; y++) {
                 if (y >= floor) {
                     level.SetBlock(x, y, 1 + 9 * 16)
@@ -298,7 +298,7 @@ Game.LevelGenerator = class {
 
         if (!safe) {
             if (length > 5) {
-                this.Decorate(level, xo, xo + length, floor)
+                this.Decorate(level, x0, x0 + length, floor)
             }
         }
 

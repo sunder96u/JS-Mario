@@ -27,11 +27,7 @@ Game.LevelState = class {
     }
     Enter() {
         // entering the level
-        let levelGenerator = new Game.LevelGenerator(320, 15)
-        let i = 0
-        let scrollSpeed = 0
-        let w = 0, h = 0
-        let backgroundLevelGenerator = null
+        let levelGenerator = new Game.LevelGenerator(320, 15), i = 0, scrollSpeed = 0, w = 0, h = 0, backgroundLevelGenerator = null
         this.Level = levelGenerator.CreateLevel(this.LevelType, this.LevelDifficulty)
 
         this.Paused = false
@@ -48,8 +44,8 @@ Game.LevelState = class {
             scrollSpeed = 4 >> i
             w = ((((this.Level.Width * 16) - 320) / scrollSpeed) | 0) + 320
             h = ((((this.Level.Height * 16) -240) / scrollSpeed) | 0) + 240
-            backgroundLevelGenerator = new Game.BackgroundGenerator(w / 32 + 1, h / 32 + 1, i === 0, this.LevelType)
-            this.backgroundLayer[i] = new Game.BackgroundRenderer(backgroundLevelGenerator.CreateLevel(), 320, 240, scrollSpeed)
+            backgroundLevelGenerator = new Game.Background(w / 32 + 1, h / 32 + 1, i === 0, this.LevelType)
+            this.BackgroundLayer[i] = new Game.BackgroundRender(backgroundLevelGenerator.CreateLevel(), 320, 240, scrollSpeed)
     
         }
         Game.Character.Initialize(this)
@@ -128,7 +124,7 @@ Game.LevelState = class {
                     }
                 }
             }
-
+            console.log(this.Sprites.Objects)
             for (i = 0; i < this.Sprites.Objects.length; i++) {
                 this.Sprites.Objects[i].Update(delta)
             }
