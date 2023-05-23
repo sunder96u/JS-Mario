@@ -2,7 +2,28 @@
 
 Game.LevelState = class {
     constructor(difficulty, type) {
+        this.LevelDifficulty = difficulty
+        this.LevelType = type
+        this.Level = null
+        this.Layer = null
+        this.BackgroundLayer = []
 
+        this.Paused = false
+        this.Sprites = null
+        this.SpritesToAdd = null
+        this.Camera = null
+        
+        this.FontShadow = null
+        this.Font = null
+
+        this.TimeLeft = 0
+        this.StartTime = 0
+        this.Tick = 0
+
+        this.Delta = 0
+
+        this.GoToMapState = false
+        this.GoToLoseState = false
     }
     Enter() {
     // entering the level

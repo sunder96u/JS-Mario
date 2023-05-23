@@ -54,7 +54,6 @@ Game.TitleState = class {
     }
     CheckForChange(context) {
         if (Engine.KeyInput.IsKeyDown(Engine.Keys.Space)) {
-            console.log('space pressed')
             context.ChangeState(Game.LevelState)
         }
     }
