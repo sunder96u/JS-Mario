@@ -20,7 +20,7 @@ Game.CoinAnimation = class {
     }
 }
 
-Game.CoinAnimation.prototype = new Game.Sprite()
+// Game.CoinAnimation.prototype = new Game.Sprite()
 
 Game.Particle = class {
     constructor(world, x, y, xa, ya) {
@@ -46,7 +46,7 @@ Game.Particle = class {
     }
 }
 
-Game.Particle = new Game.Sprite()
+// Game.Particle = new Game.Sprite()
 
 Game.Sparkle = class {
     constructor(world, x, y, xa, ya) {
@@ -72,4 +72,4 @@ Game.Sparkle = class {
     }
 }
 
-Game.Sparkle = new Game.Sprite()
+// Game.Sparkle = new Game.Sprite()

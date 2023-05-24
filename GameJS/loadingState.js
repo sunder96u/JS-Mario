@@ -16,7 +16,7 @@ Game.LoadingState = class {
 
         // set the name and src for each image and spritesheet
         this.Images[0].name = "background"
-        this.Images[0].src = "GameAssets/titlebackgroundsheet.png"
+        this.Images[0].src = "GameAssets/bgsheet.png"
         this.Images[1].name = "enemies"
         this.Images[1].src = "GameAssets/enemysheet.png"
         this.Images[2].name = "font"

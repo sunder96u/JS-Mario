@@ -353,4 +353,4 @@ Game.Character = class {
     
 }
 
-Game.Character.prototype = new Game.Sprite(null)
+// Game.Character.prototype = new Game.Sprite()

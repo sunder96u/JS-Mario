@@ -77,6 +77,12 @@ Game.SpriteTemplate = class {
         if (this(isDead)) {
             return
         }
+
+        if (this.Type === Game.Enemy.Flower) {
+            this.Sprite = new Game.FlowerEnemy(world, x * 16 + 15, y * 16 + 24)
+        } else {
+            this.Sprite = new Game.Enemy(world, x * 16 + 8, y * 16 + 15, direction, this.Type, this.Winged)
+        }
         this.Sprite.SpriteTemplate = this
         world.AddSprite(this.Sprite)
     }

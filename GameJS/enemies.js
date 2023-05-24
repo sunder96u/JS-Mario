@@ -291,8 +291,8 @@ Game.Enemy = class {
     }
 }
 
-Game.Enemy.prototype = new Game.Sprite()
-Game.Enemy.prototype.SubDraw = Game.Sprite().prototype.Draw
+// Game.Enemy.prototype = new Game.Sprite()
+// Game.Enemy.prototype.SubDraw = Game.Sprite().prototype.Draw
 
 Game.Enemy.RedKoopa = 0
 Game.Enemy.GreenKoopa = 1

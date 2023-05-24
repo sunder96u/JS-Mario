@@ -18,6 +18,7 @@ Game.LevelState = class {
 
         this.TimeLeft = 0
         this.StartTime = 0
+        this.Coins = 0
         this.Tick = 0
 
         this.Delta = 0
@@ -29,7 +30,6 @@ Game.LevelState = class {
         // entering the level
         let levelGenerator = new Game.LevelGenerator(320, 15), i = 0, scrollSpeed = 0, w = 0, h = 0, backgroundLevelGenerator = null
         this.Level = levelGenerator.CreateLevel(this.LevelType, this.LevelDifficulty)
-
         this.Paused = false
         this.Layer = new Game.LevelRender(this.Level, 320, 240)
         this.Sprites = new Engine.Drawer()
@@ -43,7 +43,7 @@ Game.LevelState = class {
         for ( i = 0; i < 2; i++) {
             scrollSpeed = 4 >> i
             w = ((((this.Level.Width * 16) - 320) / scrollSpeed) | 0) + 320
-            h = ((((this.Level.Height * 16) -240) / scrollSpeed) | 0) + 240
+            h = ((((this.Level.Height * 16) - 240) / scrollSpeed) | 0) + 240
             backgroundLevelGenerator = new Game.Background(w / 32 + 1, h / 32 + 1, i === 0, this.LevelType)
             this.BackgroundLayer[i] = new Game.BackgroundRender(backgroundLevelGenerator.CreateLevel(), 320, 240, scrollSpeed)
     
@@ -55,7 +55,7 @@ Game.LevelState = class {
         this.TimeLeft = 200
 
         this.GoToMapState = false
-        this.GoToLooseState = false
+        this.GoToLoseState = false
     }
     Exit() {
         // exiting the level (clear canvas)
@@ -78,10 +78,9 @@ Game.LevelState = class {
         if (this.Camera.X > this.Level.Width * 16 - 320) {
             this.Camera.X = this.Level.Width * 16 - 320
         }
-
         for (i = 0; i < this.Sprites.Objects.length; i++) {
             sprite = this.Sprites.Objects[i]
-            if (sprite != Game.Character) {
+            if (sprite !== Game.Character) {
                 xd = sprite.X - this.Camera.X
                 yd = sprite.Y = this.Camera.Y
                 if (xs < -64 || xd > 320 + 64 || yd < -64 || yd > 240 + 64) {
@@ -89,7 +88,7 @@ Game.LevelState = class {
                 }
             }
         }
-        
+
         if (this.Paused) {
             for(i = 0; i < this.Sprites.Objects.length; i++) {
                 if (this.Sprites.Objects[i] === Game.Character) {
@@ -102,7 +101,6 @@ Game.LevelState = class {
             this.Layer.Update(delta)
             this.Level.Update()
             this.Tick++
-
             for (x = ((this.Camera.X / 16) | 0) - 1; x <= (((this.Camera.X + this.Layer.Width) / 16) | 0) + 1; x++) {
                 for (y = ((this.Camera.Y / 16) | 0) - 1; y <= (((this.Camera.Y + this.Layer.Height) / 16) | 0) + 1; y++) {
                     dir = 0
@@ -122,15 +120,27 @@ Game.LevelState = class {
 
                         st.LastVisibleTick = this.Tick
                     }
+
+                    if (dir !== 0) {
+                        b = this.Level.GetBlock(x, y)
+                        if (((Game.Tile.Behaviors[b & 0xff]) & Game.Tile.Animated) > 0) {
+                            if ((((b % 16) /4) | 0) === 3 && ((b / 16) | 0) === 0) {
+                                if ((this.Tick - x * 2) % 100 === 0) {
+                                    for ( i = 0; i < 8; i++) {
+                                        this.AddSprite(new Game.Sparkle(this, x * 16 + 8, y * 16 + ((Math.random() * 16) | 0), Math.random() * dir, 0, 0, 1, 5))
+                                    }
+                                }
+                            }
+                        }
+                    }
                 }
             }
-            console.log(this.Sprites.Objects)
             for (i = 0; i < this.Sprites.Objects.length; i++) {
-                this.Sprites.Objects[i].Update(delta)
+                // this.Sprites.Objects[0].Update(delta)
             }
 
-            for (i = 0; i < this.Sprites.Objects.length; i++) {
-                this.Sprites.Objects[i].CollideCheck()
+            for (let i = 0; i < this.Sprites.Objects.length; i++) {
+                // this.Sprites.Objects[i].CollideCheck()
             }
         }
 
@@ -144,7 +154,8 @@ Game.LevelState = class {
     }
     Draw(context) {
         // draw the level
-        let i = 0, time = 0, t = 0
+        let i = 0
+        // loosing the camera, need to grab it
         if (this.Camera.X < 0) {
             this.Camera.X = 0
         }
@@ -152,7 +163,7 @@ Game.LevelState = class {
             this.Camera.Y = 0
         }
         if (this.Camera.X > this.Level.Width * 16 - 320) {
-            this.Camera.X = this.LevelWidth * 16 -320
+            this.Camera.X = this.Level.Width * 16 - 320
         }
         if (this.Camera.Y > this.Level.Height * 16 - 240) {
             this.Camera.Y = this.Level.Height * 16 - 240
@@ -161,11 +172,11 @@ Game.LevelState = class {
         for (i = 0; i < 2; i++) {
             this.BackgroundLayer[i].Draw(context, this.Camera)
         }
-
         context.save()
         context.translate(-this.Camera.X, -this.Camera.Y)
+
         for (i = 0; i < this.Sprites.Objects.length; i++) {
-            if (this.Sprites.Obejcts[i].Layer === 0) {
+            if (this.Sprites.Objects[i].Layer === 0) {
                 this.Sprites.Objects[i].Draw(context, this.Camera)
             }
         }
@@ -182,16 +193,27 @@ Game.LevelState = class {
         }
         context.restore()
 
-        this.DrawStringShadow(context, "Mario " + Game.Character.Lives, 0, 0)
+        this.DrawStringShadow(context, "Score:", 0, 0)
         this.DrawStringShadow(context, "000000000", 0, 1)
-        this.DrawStringShadow(context, "Coin", 14, 0)
-        this.DrawStringShadow(context, " " + Game.Character.Coins, 14, 1)
+        this.DrawStringShadow(context, "Coins:", 30, 0)
+        this.DrawStringShadow(context, " " + Game.Character.Coins, 30, 1)
+
+        if (Game.Character.DeathTime > 0) {
+            t = Game.Character.DeathTime + this.Delta
+            t = t * t * 0.1
+
+            if ( t > 900) {
+                this.GoToLoseState
+            }
+
+            this.RenderBlackout(context, ((Game.Character.XDeathPosition - this.Camera.X) | 0), ((Game.Character.YDeathPosition - this.Camera.Y) | 0), (320 - t)  | 0)
+        }
         
     }
     DrawStringShadow(context, string, x, y) {
         // shadow on string text
         this.Font.Strings[0] = {String: string, X: x * 8 + 4, Y: y * 8 + 4}
-        this.FontShadow.Strings[0] = { String: string, X: x * 8 + 5, Y:y * 8 + 5}
+        this.FontShadow.Strings[0] = { String: string, X: x * 8 + 5, Y: y * 8 + 5}
         this.FontShadow.Draw(context, this.Camera)
         this.Font.Draw(context, this.Camera)
     }
@@ -289,11 +311,11 @@ Game.LevelState = class {
     }
     CheckForChange(context) {
         if (this.GoToLoseState) {
-            context.ChangeState(new Game.LoseState)
+            context.ChangeState(new Game.LoseState())
         }
         else {
             if (this.GoToMapState) {
-                context.ChangeState(Game.titleState())
+                context.ChangeState(new Game.TitleState())
             }
         }
     }

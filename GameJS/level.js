@@ -14,10 +14,139 @@ Game.Tile = {
 
     LoadBehaviors: function() {
         let behavior = []
-        for (let i = 0; i < 256; i++)
-         {
-            behavior[i] = 0
-         }
+
+        behavior[0] = 0;
+        behavior[1] = 20;
+        behavior[2] = 28;
+        behavior[3] = 0;
+        behavior[4] = 130;
+        behavior[5] = 130;
+        behavior[6] = 130;
+        behavior[7] = 130;
+        behavior[8] = 2;
+        behavior[9] = 2;
+        behavior[10] = 2;
+        behavior[11] = 2;
+        behavior[12] = 2;
+        behavior[13] = 0;
+        behavior[14] = 138;
+        behavior[15] = 0;
+        behavior[16] = 162;
+        behavior[17] = 146;
+        behavior[18] = 154;
+        behavior[19] = 162;
+        behavior[20] = 146;
+        behavior[21] = 146;
+        behavior[22] = 154;
+        behavior[23] = 146;
+        behavior[24] = 2;
+        behavior[25] = 0;
+        behavior[26] = 2;
+        behavior[27] = 2;
+        behavior[28] = 2;
+        behavior[29] = 0;
+        behavior[30] = 2;
+        behavior[31] = 0;
+        behavior[32] = 192;
+        behavior[33] = 192;
+        behavior[34] = 192;
+        behavior[35] = 192;
+        behavior[36] = 0;
+        behavior[37] = 0;
+        behavior[38] = 0;
+        behavior[39] = 0;
+        behavior[40] = 2;
+        behavior[41] = 2;
+        behavior[42] = 0;
+        behavior[43] = 0;
+        behavior[44] = 0;
+        behavior[45] = 0;
+        behavior[46] = 2;
+        behavior[47] = 0;
+        behavior[48] = 0;
+        behavior[49] = 0;
+        behavior[50] = 0;
+        behavior[51] = 0;
+        behavior[52] = 0;
+        behavior[53] = 0;
+        behavior[54] = 0;
+        behavior[55] = 0;
+        behavior[56] = 2;
+        behavior[57] = 2;
+        
+        let i = 0;
+        for (i = 58; i < 128; i++) {
+            behavior[i] = 0;
+        }
+        
+        behavior[128] = 2;
+        behavior[129] = 2;
+        behavior[130] = 2;
+        behavior[131] = 0;
+        behavior[132] = 1;
+        behavior[133] = 1;
+        behavior[134] = 1;
+        behavior[135] = 0;
+        behavior[136] = 2;
+        behavior[137] = 2;
+        behavior[138] = 2;
+        behavior[139] = 0;
+        behavior[140] = 2;
+        behavior[141] = 2;
+        behavior[142] = 2;
+        behavior[143] = 0;
+        behavior[144] = 2;
+        behavior[145] = 0;
+        behavior[146] = 2;
+        behavior[147] = 0;
+        behavior[148] = 0;
+        behavior[149] = 0;
+        behavior[150] = 0;
+        behavior[151] = 0;
+        behavior[152] = 2;
+        behavior[153] = 2;
+        behavior[154] = 2;
+        behavior[155] = 0;
+        behavior[156] = 2;
+        behavior[157] = 2;
+        behavior[158] = 2;
+        behavior[159] = 0;
+        behavior[160] = 2;
+        behavior[161] = 2;
+        behavior[162] = 2;
+        behavior[163] = 0;
+        behavior[164] = 0;
+        behavior[165] = 0;
+        behavior[166] = 0;
+        behavior[167] = 0;
+        behavior[168] = 2;
+        behavior[169] = 2;
+        behavior[170] = 2;
+        behavior[171] = 0;
+        behavior[172] = 2;
+        behavior[173] = 2;
+        behavior[174] = 2;
+        behavior[175] = 0;
+        behavior[176] = 2;
+        behavior[177] = 2;
+        behavior[178] = 2;
+        behavior[179] = 0;
+        behavior[180] = 1;
+        behavior[181] = 1;
+        behavior[182] = 1;
+        
+        for (i = 183; i < 224; i++) {
+            behavior[i] = 0;
+        }
+        
+        behavior[224] = 1;
+        behavior[225] = 1;
+        behavior[226] = 1;
+        
+        for (i = 227; i < 256; i++) {
+            behavior[i] = 0;
+        }
+        
          this.Behaviors = behavior
     }
 }
@@ -70,15 +199,15 @@ Game.Level = class {
         if (x < 0) { x = 0 }
         if (y < 0) { y = 0 }
         if (x >= this.Width) { x = this.Width - 1 }
-        if (y >= this.Height) { y = this.Height -1 }
+        if (y >= this.Height) { y = this.Height - 1 }
         return this.Map[x][y]
     }
     GetBlock(x, y) {
         // create the block
         if (x < 0) { x = 0 }
         if (y < 0) { return 0 }
-        if (x >= this.Width) { x = this.Width -1 }
-        if (y >= this.Height) { y = this.Height -1 }
+        if (x >= this.Width) { x = this.Width - 1 }
+        if (y >= this.Height) { y = this.Height - 1 }
         return this.Map[x][y]
     }
     SetBlock(x, y, block) {
@@ -100,7 +229,7 @@ Game.Level = class {
     IsBlocking(x, y, xa, ya) {
         // give the block a blocking value
         let block = this.GetBlock(x, y)
-        let blocking = ((Game.Tile.behaviors[block & 0xff]) & Game.Tile.BlockAll) > 0
+        let blocking = ((Game.Tile.Behaviors[block & 0xff]) & Game.Tile.BlockAll) > 0
         blocking |= (ya > 0) && ((Game.Tile.Behaviors[block & 0xff]) & Game.Tile.BlockUpper) > 0
         blocking |= (ya < 0) && ((Game.Tile.Behaviors[block & 0xff]) & Game.Tile.BlockLower) > 0
         return blocking
@@ -134,13 +263,13 @@ Game.LevelGenerator = class {
         this.Type = 0
     }
     CreateLevel(type, difficulty) {
-        let length = 0, floor = 0, x = 0, y = 0, run = 0, level = null
+        let length = 0, floor = 0, x = 0, y = 0, level = null
         
         this.Type = type
         this.Difficulty = difficulty
         this.Odds[Game.Odds.Straight] = 20
         this.Odds[Game.Odds.Tubes] = 2 + difficulty
-        this.Odds[Game.Odds.Jump] = 2 + difficulty
+        this.Odds[Game.Odds.Jump] = 2 * difficulty
 
         for (let i = 0; i < this.Odds.length; i++) {
             if (this.Odds[i] < 0) {
@@ -157,8 +286,6 @@ Game.LevelGenerator = class {
         }
 
         floor = this.Height - 1 - (Math.random() * 4) | 0
-        level.ExitX = length + 8
-        level.ExitY = floor
 
         for (x = length; x < level.Width; x++) {
             for (y = 0; y < this.Height; y++) {
@@ -182,11 +309,11 @@ Game.LevelGenerator = class {
 
         switch (type) {
             case Game.Odds.Straight:
-                return this.BuildStraight(level, x, maxLength, false)
+                return this.BuildStraight(level, x, maxLength, false);
             case Game.Odds.Tubes:
-                return this.BuildTubes(level, x, maxLength)
+                return this.BuildTubes(level, x, maxLength);
             case Game.Odds.Jump:
-                return this.BuildJump(level, x, maxLength)
+                return this.BuildJump(level, x, maxLength);
         }
         return 0
 
@@ -331,7 +458,7 @@ Game.LevelGenerator = class {
             if ((x1 - 1 - e) - (x0 + 1 + s) > 2) {
                 for (x = x0 + 1 + s; x < x1 - 1 - e; x++) {
                     if (rocks) {
-                        if (x != x0 + 1 && x != x1 - 2 && ((Math.random() * 3) | 0) === 0) {
+                        if (x !== x0 + 1 && x !== x1 - 2 && ((Math.random() * 3) | 0) === 0) {
                             if (((Math.random() * 4) | 0) === 0) {
                                 level.SetBlock(x, floor - 4, 4 + 2 + 16)
                             } else { 
@@ -465,7 +592,8 @@ Game.LevelRender = class {
         this.TilesY = ((height / 16) | 0 ) + 1
         this.Delta = 0
         this.Tick = 0
-        this.AnimTime = 0
+        this.Bounce = 0
+        this.AnimimationTime = 0
         this.Background = Game.SpriteCuts.GetLevelSheet()
     }
     Update(delta) {
@@ -476,6 +604,7 @@ Game.LevelRender = class {
 
     }
     Draw(context, camera) {
+// no camera here.
         this.DrawStatic(context, camera)
         this.DrawDynamic(context, camera)
 
@@ -496,7 +625,8 @@ Game.LevelRender = class {
     }
     DrawDynamic(context, camera) {
         let x = 0, y = 0, b = 0, animationTime = 0, yo = 0, frame = null
-        for (x = (camera.X / 16) | 0; x < ((camera.X + this.Width) / 16) | 0; x++) {
+        
+        for (x = (camera.X / 16) | 0; x <= ((camera.X + this.Width) / 16) | 0; x++) {
             for (y = (camera.Y / 16) | 0; y <= ((camera.Y + this.Height) / 16) | 0; y++) {
                 b = this.Level.GetBlock(x, y)
                 if (((Game.Tile.Behaviors[b & 0xff]) & Game.Tile.Animated) > 0) {
@@ -522,7 +652,6 @@ Game.LevelRender = class {
                 }
             }
         }
-
     }
 }
 
