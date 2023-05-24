@@ -358,7 +358,7 @@ Game.LevelGenerator = class {
                 } else if (this.Difficulty < 3) {
                     type = (Math.random() * 3) | 0
                 }
-                level.SetSpriteTemplate(x, y, new Game.SpriteTemplates9type, ((Math.random() * 35) | 0) < this.Difficulty)
+                level.SetSpriteTemplate(x, y, new Game.SpriteTemplate(type, ((Math.random() * 35) | 0) < this.Difficulty))
             }
         }
     }
@@ -373,16 +373,16 @@ Game.LevelGenerator = class {
             length = maxLength
         }
 
-        for (x = x0; x < xo+ length; x++) {
+        for (x = xo; x < xo + length; x++) {
             if ( x > xTube + 1) {
-                xTube += 3 ((Math.random() * 4) | 0)
+                xTube += 3 + ((Math.random() * 4) | 0)
                 tubeHeight = floor - ((Math.random() * 2) | 0) - 2
             }
             if (xTube >= xo + length - 2) {
                 xTube += 10
             }
             if (x === xTube && ((Math.random() * 11) | 0) < this.Difficulty + 1) {
-                level.SetSpriteTemplate(x, tubeHeight, new Game.SpriteTemplates(Game.Enemy.Flower, false))
+                level.SetSpriteTemplate(x, tubeHeight, new Game.SpriteTemplate(Game.Enemy.Flower, false))
             }
 
             for (y = 0; y < this.Height; y++) {

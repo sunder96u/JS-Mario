@@ -25,7 +25,7 @@ Game.Character = class {
         this.InvulnerableTime = 0
     }
     Initialize(world) {
-        this.World = world
+        this.World = 1
         this.X = 32
         this.Y = 0
 

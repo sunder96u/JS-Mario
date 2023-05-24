@@ -31,8 +31,7 @@ Game.TitleState = class {
 
         this.drawer.Add(backgroundLayer0)
 
-        Game.GlobalMapState = new Game.LevelState()
-        Game.Character = new Game.Character()
+        Game.GlobalMapState = new Game.LevelState() 
         Game.Character.Image = Engine.Resources.Images["character"]
     }
     Exit() {
@@ -54,7 +53,7 @@ Game.TitleState = class {
     }
     CheckForChange(context) {
         if (Engine.KeyInput.IsKeyDown(Engine.Keys.Space)) {
-            context.ChangeState(new Game.LevelState())
+            context.ChangeState(new Game.LevelState(0, 0))
         }
     }
 }
