@@ -535,7 +535,7 @@ Game.LevelGenerator = class {
 
         if (floor - 4 > 0) {
             if ((x1 - 1 - elevate) - (x0 + 1 + set) > 2) {
-                for (x = x0 + 1 + s; x < x1 - 1 - e; x++) {
+                for (x = x0 + 1 + set; x < x1 - 1 - elevate; x++) {
                     if (rocks) {
                         if (x !== x0 + 1 && x !== x1 - 2 && ((Math.random() * 3) | 0) === 0) {
                             if (((Math.random() * 4) | 0) === 0) {
@@ -744,15 +744,15 @@ Game.LevelRender = class {
         if (stripe) {
             yHeight = this.Level.ExitY * 16 - (48) - (Math.sin(this.AnimimationTime)* 3 * 16) - 8
             frame = this.Background[12][3]
-            context.drawImage(Engine.Resources.Image["map"], frame.X, frame.Y, frame.Width, frame.Height, (this.Level.ExitX << 4) - camera.X - 16, yHeight - camera.Y, frame.Width, frame.Height)
-            frame.this.Background[13][3]
-            context.drawImage(Engine.Resources.Image["map"], frame.X, frame.Y, frame.Width, frame.Height, (this.Level.ExitX << 4) - camera.X, yHeight - camera.Y, frame.Width, frame.Height)
+            context.drawImage(Engine.Resources.Images["map"], frame.X, frame.Y, frame.Width, frame.Height, (this.Level.ExitX << 4) - camera.X - 16, yHeight - camera.Y, frame.Width, frame.Height)
+            frame = this.Background[13][3]
+            context.drawImage(Engine.Resources.Images["map"], frame.X, frame.Y, frame.Width, frame.Height, (this.Level.ExitX << 4) - camera.X, yHeight - camera.Y, frame.Width, frame.Height)
         }
     }
     DrawExit1(context, camera) {
         let y = 0, frame = null
         for (y = this.Level.ExitY - 8; y < this.Level.ExitY; y++) {
-            frame.this.Background[13][y === this.Level.ExitY - 8 ? 4 : 5]
+            frame = this.Background[13][y === this.Level.ExitY - 8 ? 4 : 5]
             context.drawImage(Engine.Resources.Images["map"], frame.X, frame.Y, frame.Width, frame.Height, (this.Level.ExitX << 4) - camera.X + 16, (y << 4) - camera.Y, frame.Width, frame.Height)
         }
     }

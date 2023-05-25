@@ -337,9 +337,9 @@ Game.LevelState = class {
             context.ChangeState(new Game.TitleState())
         }
         else {
-            if (this.GoToMapState) {
+            if (this.GoToLevelState) {
                 //change the second state in levelstate to randomly change background
-                context.ChangeState(new Game.LevelState(this.LevelDifficulty += 1, Math.floor(Math.random()*2)))
+                context.ChangeState(new Game.LevelState(this.LevelDifficulty += 1, Math.floor(Math.random()*1)))
             }
         }
     }

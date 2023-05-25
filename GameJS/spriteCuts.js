@@ -74,7 +74,7 @@ Game.SpriteTemplate = class {
 
     }
     Spawn(world, x, y, direction) {
-        if (this(isDead)) {
+        if (this.isDead) {
             return
         }
 
@@ -88,11 +88,7 @@ Game.SpriteTemplate = class {
     }
 }
 
-/**
-
-*/
-
-Game.CoinAnimimation = class {
+Game.CoinAnimation = class {
     constructor(world, x, y) {
         this.World = world;
         this.Life = 10;
@@ -123,7 +119,7 @@ Game.CoinAnimimation = class {
     }
 };
 
-//Game.CoinAnimimation.prototype = new Game.NotchSprite();
+Game.CoinAnimation.prototype = new Game.NotchSprite();
 
 Game.FlowerEnemy = class {
     constructor(world, x, y) {

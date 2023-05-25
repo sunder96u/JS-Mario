@@ -60,9 +60,6 @@ Game.NotchSprite = class {
     ShellCollideCheck(shell) {
         return false;
     }
-    FireballCollideCheck(fireball) {
-        return false;
-    }
 };
 
 Game.NotchSprite.prototype = new Engine.Drawable();

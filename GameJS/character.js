@@ -508,7 +508,7 @@ Game.Character.prototype.Move = function() {
     this.Visible = (((this.InvulerableTime / 2) | 0) & 1) === 0;
     
     this.WasOnGround = this.OnGround;
-    var sideWaysSpeed = Engine.KeyboardInput.IsKeyDown(Engine.Keys.A) ? 1.2 : 0.6;
+    var sideWaysSpeed = Engine.KeyInput.IsKeyDown(Engine.Keys.A) ? 1.2 : 0.6;
            
     if (this.Xa > 2) {
         this.Facing = 1;
@@ -517,7 +517,7 @@ Game.Character.prototype.Move = function() {
         this.Facing = -1;
     }
     
-    if (Engine.KeyboardInput.IsKeyDown(Engine.Keys.S) || (this.JumpTime < 0 && !this.OnGround && !this.Sliding)) {
+    if (Engine.KeyInput.IsKeyDown(Engine.Keys.S) || (this.JumpTime < 0 && !this.OnGround && !this.Sliding)) {
         if (this.JumpTime < 0) {
             this.Xa = this.XJumpSpeed;
             this.Ya = -this.JumpTime * this.YJumpSpeed;
@@ -547,7 +547,7 @@ Game.Character.prototype.Move = function() {
         this.JumpTime = 0;
     }
     
-    if (Engine.KeyboardInput.IsKeyDown(Engine.Keys.Left) && !this.Ducking) {
+    if (Engine.KeyInput.IsKeyDown(Engine.Keys.Left) && !this.Ducking) {
         if (this.Facing === 1) {
             this.Sliding = false;
         }
@@ -557,7 +557,7 @@ Game.Character.prototype.Move = function() {
         }
     }
     
-    if (Engine.KeyboardInput.IsKeyDown(Engine.Keys.Right) && !this.Ducking) {
+    if (Engine.KeyInput.IsKeyDown(Engine.Keys.Right) && !this.Ducking) {
         if (this.Facing === -1) {
             this.Sliding = false;
         }
@@ -567,15 +567,11 @@ Game.Character.prototype.Move = function() {
         }
     }
     
-    if ((!Engine.KeyboardInput.IsKeyDown(Engine.Keys.Left) && !Engine.KeyboardInput.IsKeyDown(Engine.Keys.Right)) || this.Ducking || this.Ya < 0 || this.OnGround) {
+    if ((!Engine.KeyInput.IsKeyDown(Engine.Keys.Left) && !Engine.KeyInput.IsKeyDown(Engine.Keys.Right)) || this.Ducking || this.Ya < 0 || this.OnGround) {
         this.Sliding = false;  
     }
-    
-    if (Engine.KeyboardInput.IsKeyDown(Engine.Keys.A) && this.CanShoot && this.Fire && this.World.FireballsOnScreen < 2) {
-        this.World.AddSprite(new Game.Fireball(this.World, this.X + this.Facing * 6, this.Y - 20, this.Facing));
-    }
-    
-    this.MayJump = (this.OnGround || this.Sliding) && !Engine.KeyboardInput.IsKeyDown(Engine.Keys.S);
+        
+    this.MayJump = (this.OnGround || this.Sliding) && !Engine.KeyInput.IsKeyDown(Engine.Keys.S);
     this.XFlip = (this.Facing === -1);
     this.RunTime += Math.abs(this.Xa) + 5;
     
