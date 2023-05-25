@@ -49,7 +49,7 @@ Game.LevelState = class {
     
         }
 
-        Game.Character.Initialize()
+        //Game.Character.Initialize()
 
         this.Sprites.Add(Game.Character)
         this.StartTime = 1

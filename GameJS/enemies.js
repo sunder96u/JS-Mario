@@ -421,9 +421,9 @@ Game.Enemy.prototype.CollideCheck = function() {
     var xCharacterD = Game.Character.X - this.X, yCharacterD = Game.Character.Y - this.Y;
         
     if (xCharacterD > -this.Width * 2 - 4 && xCharacterD < this.Width * 2 + 4) {
-        if (yCharacterD > -this.Height && yCharacterD < Mario.Character.Height) {
-            if (this.Type !== Mario.Enemy.Spiky && Mario.Character.Ya > 0 && yCharacterD <= 0 && (!Mario.Character.OnGround || !Mario.Character.WasOnGround)) {
-                Mario.Character.Stomp(this);
+        if (yCharacterD > -this.Height && yCharacterD < Game.Character.Height) {
+            if (this.Type !== Game.Enemy.Spiky && Game.Character.Ya > 0 && yCharacterD <= 0 && (!Game.Character.OnGround || !Game.Character.WasOnGround)) {
+                Game.Character.Stomp(this);
                 if (this.Winged) {
                     this.Winged = false;
                     this.Ya = 0;
@@ -438,20 +438,20 @@ Game.Enemy.prototype.CollideCheck = function() {
                     this.DeadTime = 10;
                     this.Winged = false;
                     
-                    if (this.Type === Mario.Enemy.RedKoopa) {
-                        this.World.AddSprite(new Mario.Shell(this.World, this.X, this.Y, 0));
-                    } else if (this.Type === Mario.Enemy.GreenKoopa) {
-                        this.World.AddSprite(new Mario.Shell(this.World, this.X, this.Y, 1));
+                    if (this.Type === Game.Enemy.RedKoopa) {
+                        this.World.AddSprite(new Game.Shell(this.World, this.X, this.Y, 0));
+                    } else if (this.Type === Game.Enemy.GreenKoopa) {
+                        this.World.AddSprite(new Game.Shell(this.World, this.X, this.Y, 1));
                     }
                 }
             } else {
-                Mario.Character.GetHurt();
+                Game.Character.GetHurt();
             }
         }
     }
 };
 
-Mario.Enemy.prototype.Move = function() {
+Game.Enemy.prototype.Move = function() {
     var i = 0, sideWaysSpeed = 1.75, runFrame = 0;
 
     this.WingTime++;
@@ -461,7 +461,7 @@ Mario.Enemy.prototype.Move = function() {
         if (this.DeadTime === 0) {
             this.DeadTime = 1;
             for (i = 0; i < 8; i++) {
-                this.World.AddSprite(new Mario.Sparkle(this.World, ((this.X + Math.random() * 16 - 8) | 0) + 4, ((this.Y - Math.random() * 8) | 0) + 4, Math.random() * 2 - 1, Math.random() * -1, 0, 1, 5));
+                this.World.AddSprite(new Game.Sparkle(this.World, ((this.X + Math.random() * 16 - 8) | 0) + 4, ((this.Y - Math.random() * 8) | 0) + 4, Math.random() * 2 - 1, Math.random() * -1, 0, 1, 5));
             }
             this.World.RemoveSprite(this);
         }
@@ -526,7 +526,7 @@ Mario.Enemy.prototype.Move = function() {
     this.XPic = runFrame;
 };
 
-Mario.Enemy.prototype.SubMove = function(xa, ya) {
+Game.Enemy.prototype.SubMove = function(xa, ya) {
     var collide = false;
     
     while (xa > 8) {
@@ -633,7 +633,7 @@ Mario.Enemy.prototype.SubMove = function(xa, ya) {
     }
 };
 
-Mario.Enemy.prototype.IsBlocking = function(x, y, xa, ya) {
+Game.Enemy.prototype.IsBlocking = function(x, y, xa, ya) {
     x = (x / 16) | 0;
     y = (y / 16) | 0;
     
@@ -644,7 +644,7 @@ Mario.Enemy.prototype.IsBlocking = function(x, y, xa, ya) {
     return this.World.Level.IsBlocking(x, y, xa, ya);
 };
 
-Mario.Enemy.prototype.ShellCollideCheck = function(shell) {
+Game.Enemy.prototype.ShellCollideCheck = function(shell) {
     if (this.DeadTime !== 0) {
         return false;
     }
@@ -652,7 +652,7 @@ Mario.Enemy.prototype.ShellCollideCheck = function(shell) {
     var xd = shell.X - this.X, yd = shell.Y - this.Y;
     if (xd > -16 && xd < 16) {
         if (yd > -this.Height && yd < shell.Height) {
-            // Enjine.Resources.PlaySound("kick");
+            // Engine.Resources.PlaySound("kick");
             
             this.Xa = shell.Facing * 2;
             this.Ya = -5;
@@ -669,15 +669,15 @@ Mario.Enemy.prototype.ShellCollideCheck = function(shell) {
     return false;
 };
 
-Mario.Enemy.prototype.BumpCheck = function(xTile, yTile) {
+Game.Enemy.prototype.BumpCheck = function(xTile, yTile) {
     if (this.DeadTime !== 0) {
         return;
     }
     
     if (this.X + this.Width > xTile * 16 && this.X - this.Width < xTile * 16 + 16 && yTile === ((this.Y - 1) / 16) | 0) {
-        // Enjine.Resources.PlaySound("kick");
+        // Engine.Resources.PlaySound("kick");
         
-        this.Xa = -Mario.Character.Facing * 2;
+        this.Xa = -Game.Character.Facing * 2;
         this.Ya = -5;
         this.FlyDeath = true;
         if (this.SpriteTemplate !== null) {
@@ -689,16 +689,16 @@ Mario.Enemy.prototype.BumpCheck = function(xTile, yTile) {
     }
 };
 
-Mario.Enemy.prototype.SubDraw = Mario.NotchSprite.prototype.Draw;
+Game.Enemy.prototype.SubDraw = Game.NotchSprite.prototype.Draw;
 
-Mario.Enemy.prototype.Draw = function(context, camera) {
+Game.Enemy.prototype.Draw = function(context, camera) {
     var xPixel = 0, yPixel = 0;
     
     if (this.Winged) {
         xPixel = ((this.XOld + (this.X - this.XOld) * this.Delta) | 0) - this.XPicO;
         yPixel = ((this.YOld + (this.Y - this.YOld) * this.Delta) | 0) - this.YPicO;
         
-        if (this.Type !== Mario.Enemy.RedKoopa && this.Type !== Mario.Enemy.GreenKoopa) {
+        if (this.Type !== Game.Enemy.RedKoopa && this.Type !== Game.Enemy.GreenKoopa) {
             this.XFlip = !this.XFlip;
             context.save();
             context.scale(this.XFlip ? -1 : 1, this.YFlip ? -1 : 1);
@@ -716,7 +716,7 @@ Mario.Enemy.prototype.Draw = function(context, camera) {
         xPixel = ((this.XOld + (this.X - this.XOld) * this.Delta) | 0) - this.XPicO;
         yPixel = ((this.YOld + (this.Y - this.YOld) * this.Delta) | 0) - this.YPicO;
         
-        if (this.Type === Mario.Enemy.RedKoopa && this.Type === Mario.Enemy.GreenKoopa) {
+        if (this.Type === Game.Enemy.RedKoopa && this.Type === Game.Enemy.GreenKoopa) {
             context.save();
             context.scale(this.XFlip ? -1 : 1, this.YFlip ? -1 : 1);
             context.translate(this.XFlip ? -320 : 0, this.YFlip ? -240 : 0);
@@ -735,24 +735,24 @@ Mario.Enemy.prototype.Draw = function(context, camera) {
 };
 
 //Static variables
-Mario.Enemy.RedKoopa = 0;
-Mario.Enemy.GreenKoopa = 1;
-Mario.Enemy.Goomba = 2;
-Mario.Enemy.Spiky = 3;
-Mario.Enemy.Flower = 4;
+Game.Enemy.RedKoopa = 0;
+Game.Enemy.GreenKoopa = 1;
+Game.Enemy.Goomba = 2;
+Game.Enemy.Spiky = 3;
+Game.Enemy.Flower = 4;
 
 /**
 	Represents a shell that once belonged to a now expired koopa.
 	Code by Rob Kleffner, 2011
 */
 
-Mario.Shell = function(world, x, y, type) {
+Game.Shell = function(world, x, y, type) {
 	this.World = world;
 	this.X = x;
 	this.Y = y;
 	
 	this.YPic = type;
-	this.Image = Enjine.Resources.Images["enemies"];
+	this.Image = Engine.Resources.Images["enemies"];
 	
 	this.XPicO = 8;
 	this.YPicO = 31;
@@ -773,9 +773,9 @@ Mario.Shell = function(world, x, y, type) {
 	this.Anim = 0;
 };
 
-Mario.Shell.prototype = new Mario.NotchSprite();
+Game.Shell.prototype = new Game.NotchSprite();
 
-Mario.Shell.prototype.FireballCollideCheck = function(fireball) {
+Game.Shell.prototype.FireballCollideCheck = function(fireball) {
 	if (this.DeadTime !== 0) {
         return false;
     }
@@ -787,7 +787,7 @@ Mario.Shell.prototype.FireballCollideCheck = function(fireball) {
 				return true;
 			}
 			
-			// Enjine.Resources.PlaySound("kick");
+			// Engine.Resources.PlaySound("kick");
 			
 			this.Xa = fireball.Facing * 2;
 			this.Ya = -5;
@@ -803,35 +803,35 @@ Mario.Shell.prototype.FireballCollideCheck = function(fireball) {
     return false;
 };
 
-Mario.Shell.prototype.CollideCheck = function() {
+Game.Shell.prototype.CollideCheck = function() {
 	if (this.Carried || this.Dead || this.DeadTime > 0) {
 		return;
 	}
 	
-	var xCharacterD = Mario.Character.X - this.X, yCharacterD = Mario.Character.Y - this.Y;
+	var xCharacterD = Game.Character.X - this.X, yCharacterD = Game.Character.Y - this.Y;
 	if (xCharacterD > -16 && xCharacterD < 16) {
-        if (yCharacterD > -this.Height && yCharacterD < Mario.Character.Height) {
-			if (Mario.Character.Ya > 0 && yCharacterD <= 0 && (!Mario.Character.OnGround || !Mario.Character.WasOnGround)) {
-				Mario.Character.Stomp(this);
+        if (yCharacterD > -this.Height && yCharacterD < Game.Character.Height) {
+			if (Game.Character.Ya > 0 && yCharacterD <= 0 && (!Game.Character.OnGround || !Game.Character.WasOnGround)) {
+				Game.Character.Stomp(this);
 				if (this.Facing !== 0) {
 					this.Xa = 0;
 					this.Facing = 0;
 				} else {
-					this.Facing = Mario.Character.Facing;
+					this.Facing = Game.Character.Facing;
 				}
 			} else {
 				if (this.Facing !== 0) {
-					Mario.Character.GetHurt();
+					Game.Character.GetHurt();
 				} else {
-					Mario.Character.Kick(this);
-					this.Facing = Mario.Character.Facing;
+					Game.Character.Kick(this);
+					this.Facing = Game.Character.Facing;
 				}
 			}
 		}
 	}
 };
 
-Mario.Shell.prototype.Move = function() {
+Game.Shell.prototype.Move = function() {
 	var sideWaysSpeed = 11, i = 0;
 	if (this.Carried) {
 		this.World.CheckShellCollide(this);
@@ -844,7 +844,7 @@ Mario.Shell.prototype.Move = function() {
 		if (this.DeadTime === 0) {
 			this.DeadTime = 1;
 			for (i = 0; i < 8; i++) {
-                this.World.AddSprite(new Mario.Sparkle(((this.X + Math.random() * 16 - 8) | 0) + 4, ((this.Y + Math.random() * 8) | 0) + 4, Math.random() * 2 - 1, Math.random() * -1, 0, 1, 5));
+                this.World.AddSprite(new Game.Sparkle(((this.X + Math.random() * 16 - 8) | 0) + 4, ((this.Y + Math.random() * 8) | 0) + 4, Math.random() * 2 - 1, Math.random() * -1, 0, 1, 5));
             }
 			this.World.RemoveSprite(this);
 		}
@@ -878,7 +878,7 @@ Mario.Shell.prototype.Move = function() {
 	this.XPic = ((this.Anim / 2) | 0) % 4 + 3;
     
     if (!this.SubMove(this.Xa, 0)) {
-        // Enjine.Resources.PlaySound("bump");
+        // Engine.Resources.PlaySound("bump");
         this.Facing = -this.Facing;
     }
     this.OnGround = false;
@@ -896,7 +896,7 @@ Mario.Shell.prototype.Move = function() {
     }
 };
 
-Mario.Shell.prototype.SubMove = function(xa, ya) {
+Game.Shell.prototype.SubMove = function(xa, ya) {
     var collide = false;
     
     while (xa > 8) {
@@ -994,7 +994,7 @@ Mario.Shell.prototype.SubMove = function(xa, ya) {
     }
 };
 
-Mario.Shell.prototype.IsBlocking = function(x, y, xa, ya) {
+Game.Shell.prototype.IsBlocking = function(x, y, xa, ya) {
     x = (x / 16) | 0;
     y = (y / 16) | 0;
     
@@ -1010,14 +1010,14 @@ Mario.Shell.prototype.IsBlocking = function(x, y, xa, ya) {
     return blocking;
 };
 
-Mario.Shell.prototype.BumpCheck = function(x, y) {
+Game.Shell.prototype.BumpCheck = function(x, y) {
     if (this.X + this.Width > x * 16 && this.X - this.Width < x * 16 + 16 && y === (((this.Y - 1) / 16) | 0)) {
-        this.Facing = -Mario.Character.Facing;
+        this.Facing = -Game.Character.Facing;
         this.Ya = -10;
     }
 };
 
-Mario.Shell.prototype.Die = function() {
+Game.Shell.prototype.Die = function() {
     this.Dead = true;
     this.Carried = false;
     this.Xa = -this.Facing * 2;
@@ -1025,7 +1025,7 @@ Mario.Shell.prototype.Die = function() {
     this.DeadTime = 100;
 };
 
-Mario.Shell.prototype.ShellCollideCheck = function(shell) {
+Game.Shell.prototype.ShellCollideCheck = function(shell) {
     if (this.DeadTime !== 0) {
         return false;
     }
@@ -1033,9 +1033,9 @@ Mario.Shell.prototype.ShellCollideCheck = function(shell) {
     var xD = shell.X - this.X, yD = shell.Y - this.Y;
     if (xD > -16 && xD < 16) {
         if (yD > -this.Height && yD < shell.Height) {
-            // Enjine.Resources.PlaySound("kick");
-            if (Mario.Character.Carried === shell || Mario.Character.Carried === this) {
-                Mario.Character.Carried = null;
+            // Engine.Resources.PlaySound("kick");
+            if (Game.Character.Carried === shell || Game.Character.Carried === this) {
+                Game.Character.Carried = null;
             }
             this.Die();
             shell.Die();
@@ -1043,10 +1043,4 @@ Mario.Shell.prototype.ShellCollideCheck = function(shell) {
         }
     }
     return false;
-};
-
-Mario.Shell.prototype.Release = function(mario) {
-    this.Carried = false;
-    this.Facing = Mario.Character.Facing;
-    this.X += this.Facing * 8;
 };

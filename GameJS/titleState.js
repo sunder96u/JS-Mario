@@ -12,9 +12,9 @@ Game.TitleState = class {
         this.drawer = new Engine.Drawer()
         this.camera = new Engine.Camera()
 
-        let backgroundGenerator = new Game.Background(2048, 15, true, Game.LevelType.Title)
-        let backgroundLayer0 = new Game.BackgroundRender(backgroundGenerator.CreateLevel(), 320, 240, 1)
-        backgroundGenerator.SetValues(2048, 15, false, Game.LevelType.Title)
+        let backgroundGenerator = new Game.Background(2048, 15, true, Game.LevelType.Underworld)
+        let backgroundLayer = new Game.BackgroundRender(backgroundGenerator.CreateLevel(), 320, 240, 1)
+        backgroundGenerator.SetValues(2048, 15, false, Game.LevelType.Underworld)
 
         this.title = new Engine.Sprite()
         this.title.Image = Engine.Resources.Images["title"]
@@ -23,16 +23,17 @@ Game.TitleState = class {
         this.Logo = Game.SpriteCuts.CreateRedFont()
         this.Logo.Strings[0] = { String: "Endless Mario in JavaScript", X: 50, Y: 20 }
 
-        this.font = Game.SpriteCuts.CreateWhiteFont()
-        this.font.Strings[0] = { String: "Press Space to Start", X: 96, Y: 120 }
+        this.font = Game.SpriteCuts.CreatePinkFont()
+        this.font.Strings[0] = { String: "Press Space to Start", X: 100, Y: 120 }
 
-        this.Instructions = Game.SpriteCuts.CreateYellowFont()
-        this.Instructions.Strings[0] = { String: "How far can you run?", X: 50, Y: 100}
+        this.Instructions = Game.SpriteCuts.CreateCyanFont()
+        this.Instructions.Strings[0] = { String: "How far can you run?", X: 75, Y: 60}
 
-        this.drawer.Add(backgroundLayer0)
+        this.drawer.Add(backgroundLayer)
 
-        Game.GlobalMapState = new Game.LevelState() 
-        Game.Character.Image = Engine.Resources.Images["character"]
+        Game.GlobalMapState = new Game.LevelState()
+        Game.Main = new Game.Character()
+        Game.Main.Image = Engine.Resources.Images["character"]
     }
     Exit() {
         this.drawer.Clear()

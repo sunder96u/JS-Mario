@@ -111,7 +111,7 @@ Game.CoinAnimimation = class {
             this.World.RemoveSprite(this);
             for (x = 0; x < 2; x++) {
                 for (y = 0; y < 2; y++) {
-                    this.World.AddSprite(new Mario.Sparkle(this.World, (this.X + x * 8 + Math.random() * 8) | 0, (this.Y + y * 8 + Math.random() * 8) | 0, 0, 0, 0, 2, 5));
+                    this.World.AddSprite(new Game.Sparkle(this.World, (this.X + x * 8 + Math.random() * 8) | 0, (this.Y + y * 8 + Math.random() * 8) | 0, 0, 0, 0, 2, 5));
                 }
             }
         }
@@ -123,16 +123,16 @@ Game.CoinAnimimation = class {
     }
 };
 
-Game.CoinAnimimation.prototype = new Game.NotchSprite();
+//Game.CoinAnimimation.prototype = new Game.NotchSprite();
 
 Game.FlowerEnemy = class {
     constructor(world, x, y) {
-        this.Image = Enjine.Resources.Images["enemies"];
+        this.Image = Engine.Resources.Images["enemies"];
         this.World = world;
         this.X = x;
         this.Y = y;
         this.Facing = 1;
-        this.Type = Mario.Enemy.Spiky;
+        this.Type = Game.Enemy.Spiky;
         this.Winged = false;
         this.NoFireballDeath = false;
         this.XPic = 0;
@@ -160,7 +160,7 @@ Game.FlowerEnemy = class {
             if (this.DeadTime === 0) {
                 this.DeadTime = 1;
                 for (i = 0; i < 8; i++) {
-                    this.World.AddSprite(new Mario.Sparkle(((this.X + Math.random() * 16 - 8) | 0) + 4, ((this.Y + Math.random() * 8) | 0) + 4, Math.random() * 2 - 1, Math.random() * -1, 0, 1, 5));
+                    this.World.AddSprite(new Game.Sparkle(((this.X + Math.random() * 16 - 8) | 0) + 4, ((this.Y + Math.random() * 8) | 0) + 4, Math.random() * 2 - 1, Math.random() * -1, 0, 1, 5));
                 }
                 this.World.RemoveSprite(this);
             }
@@ -177,7 +177,7 @@ Game.FlowerEnemy = class {
 
         if (this.Y >= this.YStart) {
             this.YStart = this.Y;
-            xd = Math.abs(Mario.Character.X - this.X) | 0;
+            xd = Math.abs(Game.Character.X - this.X) | 0;
             this.JumpTime++;
             if (this.JumpTime > 40 && xd > 24) {
                 this.Ya = -8;
@@ -196,7 +196,7 @@ Game.FlowerEnemy = class {
     }
 };
 
-Game.FlowerEnemy.prototype = new Game.Enemy();
+//Game.FlowerEnemy.prototype = new Game.Enemy();
 
 Game.Particle = class {
 	constructor(world, x, y, xa, ya, xPic, yPic) {
@@ -214,7 +214,7 @@ Game.Particle = class {
 		this.PicHeight = 8;
 		this.Life = 10;
 
-		this.Image = Enjine.Resources.Images["particles"];
+		this.Image = Engine.Resources.Images["particles"];
 	}
 	Move() {
 		if (this.Life - this.Delta < 0) {
@@ -229,7 +229,7 @@ Game.Particle = class {
 	}
 };
 
-Game.Particle.prototype = new Game.NotchSprite();
+//Game.Particle.prototype = new Game.NotchSprite();
 
 Game.Sparkle = function(world, x, y, xa, ya) {
     this.World = world;
@@ -247,10 +247,10 @@ Game.Sparkle = function(world, x, y, xa, ya) {
     
     this.PicWidth = 8;
     this.PicHeight = 8;
-    this.Image = Enjine.Resources.Images["particles"];
+    this.Image = Engine.Resources.Images["particles"];
 };
 
-Game.Sparkle.prototype = new Game.NotchSprite();
+//Game.Sparkle.prototype = new Game.NotchSprite();
 
 Game.Sparkle.prototype.Move = function() {
     if (this.Life > 10) {

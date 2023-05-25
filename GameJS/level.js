@@ -152,14 +152,15 @@ Game.Tile = {
 }
 
 Game.LevelType = {
-    Title: 0,
-    Level: 1
+    Overworld: 0,
+    Underground: 1
 }
 
 Game.Odds = {
     Straight: 0,
-    Tubes: 1,
-    Jump: 2
+    HillStraight: 1,
+    Tubes: 2,
+    Jump: 3
 }
 
 Game.Level = class {
@@ -171,16 +172,16 @@ Game.Level = class {
 
         this.Map = []
         this.Data = []
-        this.SpriteTemplates = []
+        this.Sprite = []
 
         for (let x = 0; x < this.Width; x++) {
             this.Map[x] = []
             this.Data[x] = []
-            this.SpriteTemplates[x] = []
+            this.Sprite[x] = []
             for (let y = 0; y < this.Height; y++) {
                 this.Map[x][y] = 0
                 this.Data[x][y] = 0
-                this.SpriteTemplates[x][y] = null
+                this.Sprite[x][y] = null
             }
         }
     }
@@ -226,12 +227,12 @@ Game.Level = class {
         if (y >= this.Height) { return }
         this.Data[x][y] = data
     }
-    IsBlocking(x, y, xa, ya) {
+    IsBlocking(x, y, yAcceleration) {
         // give the block a blocking value
         let block = this.GetBlock(x, y)
         let blocking = ((Game.Tile.Behaviors[block & 0xff]) & Game.Tile.BlockAll) > 0
-        blocking |= (ya > 0) && ((Game.Tile.Behaviors[block & 0xff]) & Game.Tile.BlockUpper) > 0
-        blocking |= (ya < 0) && ((Game.Tile.Behaviors[block & 0xff]) & Game.Tile.BlockLower) > 0
+        blocking |= (yAcceleration > 0) && ((Game.Tile.Behaviors[block & 0xff]) & Game.Tile.BlockUpper) > 0
+        blocking |= (yAcceleration < 0) && ((Game.Tile.Behaviors[block & 0xff]) & Game.Tile.BlockLower) > 0
         return blocking
     }
     GetSpriteTemplate(x, y) {
@@ -240,7 +241,7 @@ Game.Level = class {
         if (y < 0) { return null }
         if (x >= this.Width) { return null }
         if (y >= this.Height) { return null }
-        return this.SpriteTemplates[x][y]
+        return this.Sprite[x][y]
     }
     SetSpriteTemplate(x, y, template) {
         // set the sprites for the level
@@ -248,7 +249,7 @@ Game.Level = class {
         if (y < 0) { return }
         if (x >= this.Width) { return }
         if (y >= this.Height) { return }
-        this.SpriteTemplates[x][y] = template
+        this.Sprite[x][y] = template
 
     }
 }
@@ -286,6 +287,8 @@ Game.LevelGenerator = class {
         }
 
         floor = this.Height - 1 - (Math.random() * 4) | 0
+        level.ExitX = length + 8
+        level.ExitY = floor
 
         for (x = length; x < level.Width; x++) {
             for (y = 0; y < this.Height; y++) {
@@ -310,6 +313,8 @@ Game.LevelGenerator = class {
         switch (type) {
             case Game.Odds.Straight:
                 return this.BuildStraight(level, x, maxLength, false);
+            case Game.Odds.HillStraight:
+                return this.BuildHillStraight(level, x, maxLength)
             case Game.Odds.Tubes:
                 return this.BuildTubes(level, x, maxLength);
             case Game.Odds.Jump:
@@ -318,26 +323,26 @@ Game.LevelGenerator = class {
         return 0
 
     }
-    BuildJump(level, xo) {
-        let js = ((Math.random() * 4) | 0) + 2
-        let jl = ((Math.random() * 2) | 0) + 2
-        let length = js * 2 + jl
+    BuildJump(level, x0) {
+        let jumpSize = ((Math.random() * 4) | 0) + 2
+        let jumpLength = ((Math.random() * 2) | 0) + 2
+        let length = jumpSize * 2 + jumpLength
         let x = 0, y = 0
         let hasStairs = ((Math.random() * 3) | 0) === 0
         let floor = this.Height - 1 - ((Math.random() * 4) | 0)
 
-        for (x = xo; x < xo + length; x++) {
-            if (x < xo + js || x > xo + length - js - 1) {
+        for (x = x0; x < x0 + length; x++) {
+            if (x < x0 + jumpSize || x > x0 + length - jumpSize - 1) {
                 for (y = 0; y < this.Height; y++) {
                     if (y >= floor) {
-                        level.SetBlock(x, y, 1 + 9 * 16)
+                        level.SetBlock(x, y, 145)
                     } else if (hasStairs) {
-                        if ( x < xo + js) {
-                            if (y >= floor - (x - xo) + 1) {
+                        if ( x < x0 + jumpSize) {
+                            if (y >= floor - (x - x0) + 1) {
                                 level.SetBlock(x, y, 9)
                             }
                         } else {
-                            if (y >= floor - ((xo + length) - x) + 2) {
+                            if (y >= floor - ((x0 + length) - x) + 2) {
                                 level.SetBlock(x, y, 9)
                             }
                         }
@@ -347,6 +352,45 @@ Game.LevelGenerator = class {
         }
 
         return length
+    }
+    BuildHillStraight(level, x0, maxLength) {
+        let length = ((Math.random() * 10) | 0)
+        let floor = this.Height - 1 - (Math.random() * 4) | 0
+        let x = 0
+        let y = 0
+        let height = floor
+        let keepGoing = false
+        let l = 0
+        let xx0 = 0
+        let occupied = []
+        let xx = 0
+        let yy = 0
+
+        if (length > maxLength) {
+            length = maxLength
+        }
+        for (x = x0; x < x0 + length; x++) {
+            for (y = 0; y < this.Height; y++) {
+                if (y >= floor) {
+                    level.SetBlock(x, y, 145)
+                }
+            }
+        }
+        this.AddEnemyLine(level, x0 + 1, x0 + length - 1, floor - 1)
+
+        while (keepGoing) {
+            height = height - 2 - (Math.random() * 3) | 0
+            if (height <= 0) {
+                keepGoing = false
+            } else {
+                l = ((Math.random() * 5) | 0) + 3
+                xx0 = ((Math.random() * (length - l - 2)) | 0) + x0 + 1
+
+                if (occupied[xx0 - x0] || occupied[xx0 - x0 - l] || occupied[xx0 - x0 - 1] || occupied[xx0 -x0 + l + 1]) {
+                    keepGoing = false
+                }
+            }
+        }
     }
     AddEnemyLine(level, x0, x1, y) {
         let x = 0, type = 0
