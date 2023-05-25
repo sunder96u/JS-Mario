@@ -87,7 +87,7 @@ Game.FlowerEnemy = class {
 
         if (this.Y >= this.YStart) {
             this.YStart = this.Y;
-            xd = Math.abs(Mario.MarioCharacter.X - this.X) | 0;
+            xd = Math.abs(Mario.Character.X - this.X) | 0;
             this.JumpTime++;
             if (this.JumpTime > 40 && xd > 24) {
                 this.Ya = -8;
