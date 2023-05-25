@@ -24,6 +24,7 @@ Game.LevelState = class {
 
         this.Delta = 0
 
+        this.GoToLevelState = false
         this.GoToLoseState = false
     }
     Enter() {
@@ -56,6 +57,7 @@ Game.LevelState = class {
         this.StartTime = 1
         this.TimeLeft = 100
 
+        this.GoToLevelState = false
         this.GoToLoseState = false
     }
     Exit() {
@@ -90,6 +92,7 @@ Game.LevelState = class {
         if (this.Camera.X > this.Level.Width * 16 - 320) {
             this.Camera.X = this.Level.Width * 16 - 320
         }
+
         for (i = 0; i < this.Sprites.Objects.length; i++) {
             sprite = this.Sprites.Objects[i]
             if (sprite !== Game.Main) {
@@ -210,7 +213,7 @@ Game.LevelState = class {
         this.DrawStringShadow(context, " " + Game.Main.Score, 0, 1)
         this.DrawStringShadow(context, "Coins:", 15, 0)
         this.DrawStringShadow(context, " " + Game.Main.Coins, 15, 1)
-        this.DrawStringShadow(context, "Time", 34, 0)
+        this.DrawStringShadow(context, "Time:", 34, 0)
         time = this.TimeLeft | 0
         if (time < 0) {
             time = 0
@@ -316,6 +319,7 @@ Game.LevelState = class {
             this.Level.SetBlockData(x, y, 4)
 
             Game.Main.GetCoin()
+            console.log(this)
             this.AddSprite(new Game.CoinAnimation(this, x, y))
         }
 
@@ -339,7 +343,7 @@ Game.LevelState = class {
         else {
             if (this.GoToLevelState) {
                 //change the second state in levelstate to randomly change background
-                context.ChangeState(new Game.LevelState(this.LevelDifficulty += 1, 0))
+                context.ChangeState(new Game.LevelState(this.LevelDifficulty += 1, Math.floor(Math.random()*2)))
             }
         }
     }

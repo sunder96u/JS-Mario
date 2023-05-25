@@ -83,8 +83,9 @@ Game.SpriteTemplate = class {
         } else {
             this.Sprite = new Game.Enemy(world, x * 16 + 8, y * 16 + 15, direction, this.Type, this.Winged)
         }
-        this.Sprite.SpriteTemplate = this
+        this.Sprite.SpriteTemplates = this
         world.AddSprite(this.Sprite)
+        console.log(world)
     }
 }
 

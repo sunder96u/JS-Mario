@@ -41,11 +41,11 @@
 //             return
 //         }
 
-//         let xCharacterD = Game.Character.X - this.X, yCharacterD = Game.Character.Y - this.Y
+//         let xCharacterD = Game.Main.X - this.X, yCharacterD = Game.Main.Y - this.Y
 //         if (xCharacterD > -this.Width * 2 - 4 && xCharacterD < this.Width * 2 + 4) {
-//             if (yCharacterD > -this.Height && yCharacterD < Game.Character.Height) {
-//                 if (this.Type != Game.Enemy.Spiky && Game.Character.Ya > 0 && yCharacterD <= 0 && (!Game.Character.OnGround || !Game.Character.WasOnGround)) {
-//                     Game.Character.Stomp(this)
+//             if (yCharacterD > -this.Height && yCharacterD < Game.Main.Height) {
+//                 if (this.Type != Game.Enemy.Spiky && Game.Main.Ya > 0 && yCharacterD <= 0 && (!Game.Main.OnGround || !Game.Main.WasOnGround)) {
+//                     Game.Main.Stomp(this)
 //                     if (this.Winged) {
 //                         this.Winged = false
 //                         this.Ya = 0
@@ -60,7 +60,7 @@
 //                         this.Winged = false
 //                     }
 //                 } else {
-//                     Game.Character.GetHurt()
+//                     Game.Main.GetHurt()
 //                 }
 //             }
 //         }
@@ -244,7 +244,7 @@
 //         }
 
 //         if (this.X + this.Width > xTile * 16 && this.X - this.Width < xTile *16 + 16 && yTile === ((this.Y - 1) / 16) | 0) {
-//             this.Xa = -Game.Character.Facing * 2
+//             this.Xa = -Game.Main.Facing * 2
 //             this.Ya = -5
 //             this.FlyDeath = true
 //             if (this.SpriteTemplate != null) {
@@ -347,7 +347,7 @@
 //         this.Tick++
 //         if (this.Y >= this.YStart) {
 //             this.YStart = this.Y
-//             xd = Math.abs(Game.Character.X - this.X) | 0
+//             xd = Math.abs(Game.Main.X - this.X) | 0
 //             this.JumpTime++
 //             if (this.JumpTime > 40 && xd > 24) {
 //                 this.Ya = -8
@@ -699,6 +699,7 @@ Game.Enemy.prototype.Draw = function(context, camera) {
             context.save()
             context.scale(this.XFlip ? -1 : 1, this.YFlip ? -1 : 1)
             context.translate(this.XFlip ? -320 : 0, this.YFlip ? -240 : 0)
+            console.log(this.Image)
             context.drawImage(this.Image, (((this.WingTime / 4) | 0) % 2) * 16, 4 * 32, 16, 32,
                 this.XFlip ? (320 - xPixel - 24) : xPixel - 8, this.YFlip ? (240 - yPixel - 32) : yPixel - 8, 16, 32)
             context.restore()

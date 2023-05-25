@@ -172,16 +172,16 @@ Game.Level = class {
 
         this.Map = []
         this.Data = []
-        this.Sprite = []
+        this.SpriteTemplates= []
 
         for (let x = 0; x < this.Width; x++) {
             this.Map[x] = []
             this.Data[x] = []
-            this.Sprite[x] = []
+            this.SpriteTemplates[x] = []
             for (let y = 0; y < this.Height; y++) {
                 this.Map[x][y] = 0
                 this.Data[x][y] = 0
-                this.Sprite[x][y] = null
+                this.SpriteTemplates[x][y] = null
             }
         }
     }
@@ -241,7 +241,7 @@ Game.Level = class {
         if (y < 0) { return null }
         if (x >= this.Width) { return null }
         if (y >= this.Height) { return null }
-        return this.Sprite[x][y]
+        return this.SpriteTemplates[x][y]
     }
     SetSpriteTemplate(x, y, template) {
         // set the sprites for the level
@@ -249,7 +249,7 @@ Game.Level = class {
         if (y < 0) { return }
         if (x >= this.Width) { return }
         if (y >= this.Height) { return }
-        this.Sprite[x][y] = template
+        this.SpriteTemplates[x][y] = template
 
     }
 }
@@ -269,7 +269,8 @@ Game.LevelGenerator = class {
         this.Type = type
         this.Difficulty = difficulty
         this.Odds[Game.Odds.Straight] = 20
-        this.Odds[Game.Odds.Tubes] = 2 + difficulty
+        this.Odds[Game.Odds.HillStraight] = 10
+        this.Odds[Game.Odds.Tubes] = 3 + difficulty
         this.Odds[Game.Odds.Jump] = 2 * difficulty
 
         for (let i = 0; i < this.Odds.length; i++) {
@@ -446,7 +447,7 @@ Game.LevelGenerator = class {
         let floor = this.Height - 1 - (Math.random() * 4) | 0
         let xTube = x0 + 1 + (Math.random() * 4) | 0
         let tubeHeight = floor - ((Math.random() * 2) | 0) -2
-        let x = 0, y = 0, xPic = 0
+        let x = 0, y = 0, xPicture = 0
 
         if (length > maxLength) {
             length = maxLength
@@ -676,7 +677,7 @@ Game.LevelRender = class {
         this.Delta = 0
         this.Tick = 0
         this.Bounce = 0
-        this.AnimimationTime = 0
+        this.AnimationTime = 0
         this.Background = Game.SpriteCuts.GetLevelSheet()
     }
     Update(delta) {
@@ -742,7 +743,7 @@ Game.LevelRender = class {
             context.drawImage(Engine.Resources.Images["map"], frame.X, frame.Y, frame.Width, frame.Height, (this.Level.ExitX << 4) - camera.X - 16, (y << 4) - camera.Y, frame.Width, frame.Height)
         }
         if (stripe) {
-            yHeight = this.Level.ExitY * 16 - (48) - (Math.sin(this.AnimimationTime)* 3 * 16) - 8
+            yHeight = this.Level.ExitY * 16 - (48) - (Math.sin(this.AnimationTime)* 3 * 16) - 8
             frame = this.Background[12][3]
             context.drawImage(Engine.Resources.Images["map"], frame.X, frame.Y, frame.Width, frame.Height, (this.Level.ExitX << 4) - camera.X - 16, yHeight - camera.Y, frame.Width, frame.Height)
             frame = this.Background[13][3]
