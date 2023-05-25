@@ -35,4 +35,7 @@ for the insperation to create this game using JS
 Assets found at:
 https://openhtml5games.github.io/games-mirror/dist/mariohtml5/main.html
 
+When creating this project, I used https://openhtml5games.github.io/games-mirror/dist/mariohtml5/main.html. I changed some folder name, and some variable names. I kept most Class and Constructor names as they provided a great description of what they did. I did also keep generic variable names such as x, y, length, width, height and these provided a great description of what they did. I changed the game from a map based mario game, to an endless adventure with rotating backgrounds after each stage ended. I updated the formate of all pages except character.js, enemies.js, and spriteCuts.js to ES2015 formating, I kept those as they were to prevent issues
+
+
 

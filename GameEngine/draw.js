@@ -25,10 +25,10 @@ Engine.Drawer = class {
     Clear() {
         this.Objects.splice(0, this.Objects.length)
     }
-    Contains(obj) {
+    Contains(objects) {
         let i = this.Objects.length
         while (i--) {
-            if (this.Objects[i] === obj) {
+            if (this.Objects[i] === objects) {
                 return true
             }
         }
@@ -66,6 +66,8 @@ Engine.Drawer = class {
 		}
     }
     Draw(context, camera) {
+
+        //This will sort the sprites on the Z-index
         if (this.Unsorted) {
             this.Unsorted = false
             this.Objects.sort(function(x1,x2) { return x1.ZOrder - x2.ZOrder})

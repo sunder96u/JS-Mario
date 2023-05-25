@@ -18,11 +18,11 @@ Engine.Resources = {
     },
 
     AddImages: function(array) {
-        array.forEach((image) => {
-            let tempImage = new Image()
-            this.Images[image.name] = tempImage
-            tempImage.src = image.src
-        })
+        for(let i = 0; i < array.length; i++) {
+            let tempImage = new Image ()
+            this.Images[array[i].name] = tempImage
+            tempImage.src = array[i].src
+        }
         return this
     },
 
