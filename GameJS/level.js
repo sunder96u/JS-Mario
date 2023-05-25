@@ -293,7 +293,7 @@ Game.LevelGenerator = class {
         for (x = length; x < level.Width; x++) {
             for (y = 0; y < this.Height; y++) {
                 if (y >= floor) {
-                    level.SetBlock(x, y, 1 + 9 * 16)
+                    level.SetBlock(x, y, 145)
                 }
             }
         }
@@ -388,9 +388,44 @@ Game.LevelGenerator = class {
 
                 if (occupied[xx0 - x0] || occupied[xx0 - x0 - l] || occupied[xx0 - x0 - 1] || occupied[xx0 -x0 + l + 1]) {
                     keepGoing = false
+                } else {
+                    occupied[xx0 - x0] = true
+                    occupied[xx0 - x0 + l] = true
+                    this.AddEnemyLine(level, xx0, xx0 + l, height - 1)
+                    if (((Math.random() * 4) | 0) === 0) {
+                        this.Decorate(level, xx0 - 1, xx0 + l + 1, height)
+                        keepGoing = false
+                    }
+
+                    for (x = xx0; x < xx0 + l; x++) {
+                        for (y = height; y < floor; y++) {
+                            xx = 5
+                            yy = 9
+                            if (x === xx0) {
+                                xx = 4
+                            }
+                            if (x === xx0 + l - 1) {
+                                xx = 6
+                            }
+                            if (y === height) {
+                                yy = 8
+                            }
+                            if (level.GetBlock(x, y) === 0) {
+                                level.SetBlock(x, y, xx + yy * 16)
+                            } else {
+                                if (level.GetBlock(x, y) === 132) {
+                                    level.SetBlock(x, y, 180)
+                                }
+                                if (level.GetBlock(x, y) === (134)) {
+                                    level.SetBlock(x, y, 182)
+                                }
+                            }
+                        }
+                    }
                 }
             }
         }
+        return length
     }
     AddEnemyLine(level, x0, x1, y) {
         let x = 0, type = 0
@@ -406,10 +441,10 @@ Game.LevelGenerator = class {
             }
         }
     }
-    BuildTubes(level, xo, maxLength) {
+    BuildTubes(level, x0, maxLength) {
         let length = ((Math.random() * 10) | 0) + 5
         let floor = this.Height - 1 - (Math.random() * 4) | 0
-        let xTube = xo + 1 + (Math.random() * 4) | 0
+        let xTube = x0 + 1 + (Math.random() * 4) | 0
         let tubeHeight = floor - ((Math.random() * 2) | 0) -2
         let x = 0, y = 0, xPic = 0
 
@@ -417,12 +452,12 @@ Game.LevelGenerator = class {
             length = maxLength
         }
 
-        for (x = xo; x < xo + length; x++) {
+        for (x = x0; x < x0 + length; x++) {
             if ( x > xTube + 1) {
                 xTube += 3 + ((Math.random() * 4) | 0)
                 tubeHeight = floor - ((Math.random() * 2) | 0) - 2
             }
-            if (xTube >= xo + length - 2) {
+            if (xTube >= x0 + length - 2) {
                 xTube += 10
             }
             if (x === xTube && ((Math.random() * 11) | 0) < this.Difficulty + 1) {
@@ -431,14 +466,14 @@ Game.LevelGenerator = class {
 
             for (y = 0; y < this.Height; y++) {
                 if (y >= floor) {
-                    level.SetBlock(x, y, 1 + 9 * 16)
+                    level.SetBlock(x, y, 145)
                 } else {
                     if ((x === xTube || x === xTube + 1) && y >= tubeHeight) {
-                        xPic = 10 + x - xTube
+                        xPicture = 10 + x - xTube
                         if (y === tubeHeight) {
-                            level.SetBlock(x, y, xPic)
+                            level.SetBlock(x, y, xPicture)
                         } else {
-                            level.SetBlock(x, y, xPic + 16)
+                            level.SetBlock(x, y, xPicture + 16)
                         }
                     }
                 }
@@ -462,7 +497,7 @@ Game.LevelGenerator = class {
         for (x = x0; x < x0 + length; x++) {
             for (y = 0; y < this.Height; y++) {
                 if (y >= floor) {
-                    level.SetBlock(x, y, 1 + 9 * 16)
+                    level.SetBlock(x, y, 145)
                 }
             }
         }
@@ -481,38 +516,38 @@ Game.LevelGenerator = class {
         }
 
         let rocks = true
-        let s = (Math.random() * 4) | 0
-        let e = (Math.random() * 4) | 0
+        let set = (Math.random() * 4) | 0
+        let elevate = (Math.random() * 4) | 0
         let x = 0
 
         this.AddEnemyLine(level, x0 +1, x1 - 1, floor - 1)
 
         if (floor - 2 > 0) {
-            if ((x1 - 1 - e) - (x1 + 1 + s) > 1) {
-                for (x = x0 + 1 + s; x < x1 - 1 - e; x++) {
+            if ((x1 - 1 - elevate) - (x1 + 1 + set) > 1) {
+                for (x = x0 + 1 + set; x < x1 - 1 - elevate; x++) {
                     level.SetBlock(x, floor - 2, 2 + 2 * 16)
                 }
             }
         }
 
-        s = (Math.random() * 4) | 0
-        e = (Math.random() * 4) | 0
+        set = (Math.random() * 4) | 0
+        elevate = (Math.random() * 4) | 0
 
         if (floor - 4 > 0) {
-            if ((x1 - 1 - e) - (x0 + 1 + s) > 2) {
+            if ((x1 - 1 - elevate) - (x0 + 1 + set) > 2) {
                 for (x = x0 + 1 + s; x < x1 - 1 - e; x++) {
                     if (rocks) {
                         if (x !== x0 + 1 && x !== x1 - 2 && ((Math.random() * 3) | 0) === 0) {
                             if (((Math.random() * 4) | 0) === 0) {
-                                level.SetBlock(x, floor - 4, 4 + 2 + 16)
+                                level.SetBlock(x, floor - 4, 22)
                             } else { 
-                                level.SetBlock(x, floor - 4, 4 + 1 + 16)
+                                level.SetBlock(x, floor - 4, 21)
                             }
                         } else if (((Math.random() * 4) | 0) === 0) {
                             if (((Math.random() * 4) | 0) === 0) {
-                                level.SetBlock(x, floor - 4, 2 + 16)
+                                level.SetBlock(x, floor - 4, 18)
                             } else {
-                                level.SetBlock(x, floor - 4, 1 + 16)
+                                level.SetBlock(x, floor - 4, 17)
                             }
                         } else {
                             level.SetBlock(x, floor - 4, 16)
@@ -543,10 +578,14 @@ Game.LevelGenerator = class {
         this.Blockify(level, blockMap, this.Width + 1, this.Height + 1)
     }
     Blockify(level, blocks, width, height) {
-        let b = [], x = 0, y = 0, xx = 0, yy = 0, i = 0, _xx = 0, _yy = 0
+        let block = [], x = 0, y = 0, xx = 0, yy = 0, i = 0, _xx = 0, _yy = 0, to = 0
 
         for (i = 0; i < 2; i++) {
-            b[i] = []
+            block[i] = []
+        }
+
+        if (this.Type === Game.LevelType.Underworld) {
+            to = 12
         }
 
         for (x = 0; x < width; x++) {
@@ -567,60 +606,60 @@ Game.LevelGenerator = class {
                         if( _yy > height - 1) {
                             _yy = height - 1
                         }
-                        b[xx-x][yy-y] = blocks[_xx][_yy]
+                        block[xx-x][yy-y] = blocks[_xx][_yy]
                     }
                 }
 
-                if (b[0][0] === b[1][0] && b[0][1] === b[1][1]) {
-                    if (b[0][0] === b[0][1]) {
-                        if (b[0][0]) {
-                            level.SetBlock(x, y, 1 + 9 * 16)
+                if (block[0][0] === block[1][0] && block[0][1] === block[1][1]) {
+                    if (block[0][0] === block[0][1]) {
+                        if (block[0][0]) {
+                            level.SetBlock(x, y, 145 + to)
                         }
                     } else {
-                        if (b[0][0]) {
-                            level.SetBlock[x, y, 1 + 10 * 16]
+                        if (block[0][0]) {
+                            level.SetBlock[x, y, 161 + to]
                         } else {
-                            level.SetBlock(x, y, 1 + 8 * 16)
+                            level.SetBlock(x, y, 129 + to)
                         }
                     }
-                } else if (b[0][0] === b[0][1] && b[1][0] === b[1][1]) {
-                    if (b[0][0]) {
-                        level.SetBlock(x, y, 2 + 9 * 16)
+                } else if (block[0][0] === block[0][1] && block[1][0] === block[1][1]) {
+                    if (block[0][0]) {
+                        level.SetBlock(x, y, 146 + to)
                     } else {
-                        level.SetBlock(x, y, 9 * 16)
+                        level.SetBlock(x, y, 144 + to)
                     }
-                } else if (b[0][0] === b[1][1] && b[0][1] === b[1][0]) {
-                    level.SetBlock(x, y, 1 + 9 * 16)
-                } else if (b[0][0] === b[1][0]) {
-                    if (b[0][0]) {
-                        if (b[0][1]) {
-                            level.SetBlock(x, y, 3 + 10 * 16)
+                } else if (block[0][0] === block[1][1] && block[0][1] === block[1][0]) {
+                    level.SetBlock(x, y, 145 + to)
+                } else if (block[0][0] === block[1][0]) {
+                    if (block[0][0]) {
+                        if (block[0][1]) {
+                            level.SetBlock(x, y, 163 + to)
                         } else {
-                            level.SetBlock(x, y, 3+ 11 * 16)
+                            level.SetBlock(x, y, 179 + to)
                         }
                     } else {
-                        if (b[0][1]) {
-                            level.SetBlock(x, y, 2 + 8 * 16)
+                        if (block[0][1]) {
+                            level.SetBlock(x, y, 130 + to)
                         } else { 
-                            level.SetBlock(x, y, 8 * 16)
+                            level.SetBlock(x, y, 128 + to)
                         }
                     } 
-                } else if (b[0][1] === b[1][1]) {
-                    if (b[0][1]) {
-                        if (b[0][0]) {
-                            level.SetBlock(x, y, 3 + 9 * 16)
+                } else if (block[0][1] === block[1][1]) {
+                    if (block[0][1]) {
+                        if (block[0][0]) {
+                            level.SetBlock(x, y, 147 + to)
                         } else {
-                            level.SetBlock(x, y, 3 + 8 * 16)
+                            level.SetBlock(x, y, 131 + to)
                         }
                     } else {
-                        if (b[0][0]) {
-                            level.SetBlock(x, y, 2 + 10 * 16)
+                        if (block[0][0]) {
+                            level.SetBlock(x, y, 162 + to)
                         } else {
-                            level.SetBlock(x, y, 10 * 16)
+                            level.SetBlock(x, y, 160 + to)
                         }
                     }
                 } else {
-                    level.SetBlock(x, y, 1 + 16)
+                    level.SetBlock(x, y, 17 + to)
                 }
             }
         }
@@ -648,53 +687,73 @@ Game.LevelRender = class {
 
     }
     Draw(context, camera) {
-// no camera here.
         this.DrawStatic(context, camera)
         this.DrawDynamic(context, camera)
 
     }
     DrawStatic(context, camera) {
-        let x = 0, y = 0, b = 0, frame = null
+        let x = 0, y = 0, block = 0, frame = null
         let xTileStart = (camera.X / 16) | 0
         let xTileEnd = ((camera.X + this.Width) / 16) | 0
         for ( x = xTileStart; x < xTileEnd + 1; x++) {
             for (y = 0; y < this.TilesY; y++) {
-                b = this.Level.GetBlock(x, y) & 0xff
-                if ((Game.Tile.Behaviors[b] & Game.Tile.Animated) === 0) {
-                    frame = this.Background[b % 16][(b / 16) | 0]
+                block = this.Level.GetBlock(x, y) & 0xff
+                if ((Game.Tile.Behaviors[block] & Game.Tile.Animated) === 0) {
+                    frame = this.Background[block % 16][(block / 16) | 0]
                     context.drawImage(Engine.Resources.Images['map'], frame.X, frame.Y, frame.Width, frame.Height, ((x << 4) - camera.X) | 0, (y << 4) | 0, frame.Width, frame.Height)
                 }
             }
         }
     }
     DrawDynamic(context, camera) {
-        let x = 0, y = 0, b = 0, animationTime = 0, yo = 0, frame = null
+        let x = 0, y = 0, block = 0, animationTime = 0, y0 = 0, frame = null
         
         for (x = (camera.X / 16) | 0; x <= ((camera.X + this.Width) / 16) | 0; x++) {
             for (y = (camera.Y / 16) | 0; y <= ((camera.Y + this.Height) / 16) | 0; y++) {
-                b = this.Level.GetBlock(x, y)
-                if (((Game.Tile.Behaviors[b & 0xff]) & Game.Tile.Animated) > 0) {
+                block = this.Level.GetBlock(x, y)
+                if (((Game.Tile.Behaviors[block & 0xff]) & Game.Tile.Animated) > 0) {
                     animationTime = ((this.Bounce / 3) | 0) % 4
-                    if ((((b % 16) / 4) | 0) === 0 && ((b / 16) | 0) === 1) {
+                    if ((((block % 16) / 4) | 0) === 0 && ((block / 16) | 0) === 1) {
                         animationTime = ((this.Bounce / 2 (x + y) / 8) | 0) % 20
                         if (animationTime > 3) {
                             animationTime = 0
                         }
                     }
-                    if ((((b % 16) / 4) | 0) === 3 && ((b / 16) | 0) === 0) {
+                    if ((((block % 16) / 4) | 0) === 3 && ((block / 16) | 0) === 0) {
                         animationTime = 2
                     }
-                    yo = 0
+                    y0 = 0
                     if (x >= 0 && y >= 0 && x < this.Level.Width && y < this.Level.Height) {
-                        yo = this.Level.Data[x][y]
+                        y0 = this.Level.Data[x][y]
                     }
-                    if ( yo > 0) {
-                        yo = (Math.sin((yo - this.Delta) / 4 * Math.PI) * 8) | 0
+                    if (y0 > 0) {
+                        y0 = (Math.sin((yo - this.Delta) / 4 * Math.PI) * 8) | 0
                     }
-                    frame = this.Background[(((b % 16) / 4) | 0) * 4 + animationTime][(b / 16) | 0]
-                    context.drawImage(Engine.Resources.Images["map"], frame.X, frame.Y, frame.Width, frame.Height, (x << 4) - camera.X, (y << 4) - camera.Y - yo, frame.Width, frame.Height)
+                    frame = this.Background[(((block % 16) / 4) | 0) * 4 + animationTime][(block / 16) | 0]
+                    context.drawImage(Engine.Resources.Images["map"], frame.X, frame.Y, frame.Width, frame.Height, (x << 4) - camera.X, (y << 4) - camera.Y - y0, frame.Width, frame.Height)
                 }
             }
+        }
+    }
+    DrawExit0(context, camera, stripe) {
+        let y = 0, yHeight = 0, frame = null
+        for (y = this.Level.ExitY - 8; y < this.Level.ExitY; y++) {
+            frame = this.Background[12][y === this.Level.ExitY - 8 ? 4 : 5]
+            context.drawImage(Engine.Resources.Images["map"], frame.X, frame.Y, frame.Width, frame.Height, (this.Level.ExitX << 4) - camera.X - 16, (y << 4) - camera.Y, frame.Width, frame.Height)
+        }
+        if (stripe) {
+            yHeight = this.Level.ExitY * 16 - (48) - (Math.sin(this.AnimimationTime)* 3 * 16) - 8
+            frame = this.Background[12][3]
+            context.drawImage(Engine.Resources.Image["map"], frame.X, frame.Y, frame.Width, frame.Height, (this.Level.ExitX << 4) - camera.X - 16, yHeight - camera.Y, frame.Width, frame.Height)
+            frame.this.Background[13][3]
+            context.drawImage(Engine.Resources.Image["map"], frame.X, frame.Y, frame.Width, frame.Height, (this.Level.ExitX << 4) - camera.X, yHeight - camera.Y, frame.Width, frame.Height)
+        }
+    }
+    DrawExit1(context, camera) {
+        let y = 0, frame = null
+        for (y = this.Level.ExitY - 8; y < this.Level.ExitY; y++) {
+            frame.this.Background[13][y === this.Level.ExitY - 8 ? 4 : 5]
+            context.drawImage(Engine.Resources.Images["map"], frame.X, frame.Y, frame.Width, frame.Height, (this.Level.ExitX << 4) - camera.X + 16, (y << 4) - camera.Y, frame.Width, frame.Height)
         }
     }
 }

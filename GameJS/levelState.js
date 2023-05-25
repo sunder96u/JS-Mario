@@ -27,7 +27,7 @@ Game.LevelState = class {
     }
     Enter() {
         // entering the level
-        let levelGenerator = new Game.LevelGenerator(320, 15), i = 0, scrollSpeed = 0, w = 0, h = 0, backgroundLevelGenerator = null
+        let levelGenerator = new Game.LevelGenerator(320, 15), i = 0, scrollSpeed = 0, width = 0, height = 0, backgroundLevelGenerator = null
         this.Level = levelGenerator.CreateLevel(this.LevelType, this.LevelDifficulty)
         this.Paused = false
         this.Layer = new Game.LevelRender(this.Level, 320, 240)
@@ -42,18 +42,18 @@ Game.LevelState = class {
 
         for ( i = 0; i < 2; i++) {
             scrollSpeed = 4 >> i
-            w = ((((this.Level.Width * 16) - 320) / scrollSpeed) | 0) + 320
-            h = ((((this.Level.Height * 16) - 240) / scrollSpeed) | 0) + 240
-            backgroundLevelGenerator = new Game.Background(w / 32 + 1, h / 32 + 1, i === 0, this.LevelType)
+            width = ((((this.Level.Width * 16) - 320) / scrollSpeed) | 0) + 320
+            height = ((((this.Level.Height * 16) - 240) / scrollSpeed) | 0) + 240
+            backgroundLevelGenerator = new Game.Background(width / 32 + 1, height / 32 + 1, i === 0, this.LevelType)
             this.BackgroundLayer[i] = new Game.BackgroundRender(backgroundLevelGenerator.CreateLevel(), 320, 240, scrollSpeed)
     
         }
 
-        //Game.Character.Initialize()
+        Game.Main.Initialize(this)
 
-        this.Sprites.Add(Game.Character)
+        this.Sprites.Add(Game.Main)
         this.StartTime = 1
-        this.TimeLeft = 200
+        this.TimeLeft = 100
 
         this.GoToLoseState = false
     }
@@ -67,19 +67,22 @@ Game.LevelState = class {
         delete this.FontShadow
         delete this.Font
     }
+    CheckShellCollide(shell) {
+        this.ShellsToCheck.push(shell)
+    }
     Update(delta) {
         // update the level
-        let i = 0, j = 0, xd = 0, yd = 0, sprite = null, x = 0, y = 0, dir = 0, st = null, b = 0
+        let i = 0, xDirection = 0, yDirection = 0, sprite = null, x = 0, y = 0, direction = 0, sTemplate = null, block = 0
         this.Delta = delta
         this.TimeLeft -= delta
         if ((this.TimeLeft | 0) === 0) {
-            Game.Character.Die()
+            Game.Main.Die()
         }
         if (this.StartTime > 0) {
             this.StartTime++
         }
 
-        this.Camera.X = Game.Character.X - 160
+        this.Camera.X = Game.Main.X - 160
         if (this.Camera.X < 0) {
             this.Camera.X = 0
         }
@@ -88,10 +91,10 @@ Game.LevelState = class {
         }
         for (i = 0; i < this.Sprites.Objects.length; i++) {
             sprite = this.Sprites.Objects[i]
-            if (sprite !== Game.Character) {
-                xd = sprite.X - this.Camera.X
-                yd = sprite.Y = this.Camera.Y
-                if (xs < -64 || xd > 320 + 64 || yd < -64 || yd > 240 + 64) {
+            if (sprite !== Game.Main) {
+                xDirection = sprite.X - this.Camera.X
+                yDirection = sprite.Y = this.Camera.Y
+                if (xDirection < -64 || xDirection > 320 + 64 || yDirection < -64 || yDirection > 240 + 64) {
                     this.Sprites.RemoveAt(i)
                 }
             }
@@ -99,7 +102,7 @@ Game.LevelState = class {
 
         if (this.Paused) {
             for(i = 0; i < this.Sprites.Objects.length; i++) {
-                if (this.Sprites.Objects[i] === Game.Character) {
+                if (this.Sprites.Objects[i] === Game.Main) {
                     this.Sprites.Objects[i].Update(delta)
                 } else {
                     this.Sprites.Objects[i].UpdateNoMove(delta)
@@ -111,31 +114,31 @@ Game.LevelState = class {
             this.Tick++
             for (x = ((this.Camera.X / 16) | 0) - 1; x <= (((this.Camera.X + this.Layer.Width) / 16) | 0) + 1; x++) {
                 for (y = ((this.Camera.Y / 16) | 0) - 1; y <= (((this.Camera.Y + this.Layer.Height) / 16) | 0) + 1; y++) {
-                    dir = 0
-                    if (x * 16 + 8 > Game.Character.X + 16) {
-                        dir = -1
+                    direction = 0
+                    if (x * 16 + 8 > Game.Main.X + 16) {
+                        direction = -1
                     }
-                    if (x * 16 + 8 < Game.Character.X - 16) {
-                        dir = 1
+                    if (x * 16 + 8 < Game.Main.X - 16) {
+                        direction = 1
                     }
-                    st = this.Level.GetSpriteTemplate(x, y)
-                    if (st !== null) {
-                        if (st.LastVisibleTick != this.Tick - 1) {
-                            if (st.Sprite === null || !this.Sprites.Contains(st.Sprite)) {
-                                st.Spawn(this, x, y, dir)
+                    sTemplate = this.Level.GetSpriteTemplate(x, y)
+                    if (sTemplate !== null) {
+                        if (sTemplate.LastVisibleTick != this.Tick - 1) {
+                            if (sTemplate.Sprite === null || !this.Sprites.Contains(sTemplate.Sprite)) {
+                                sTemplate.Spawn(this, x, y, direction)
                             }
                         }
 
-                        st.LastVisibleTick = this.Tick
+                        sTemplate.LastVisibleTick = this.Tick
                     }
 
-                    if (dir !== 0) {
-                        b = this.Level.GetBlock(x, y)
-                        if (((Game.Tile.Behaviors[b & 0xff]) & Game.Tile.Animated) > 0) {
-                            if ((((b % 16) /4) | 0) === 3 && ((b / 16) | 0) === 0) {
+                    if (direction !== 0) {
+                        block = this.Level.GetBlock(x, y)
+                        if (((Game.Tile.Behaviors[block & 0xff]) & Game.Tile.Animated) > 0) {
+                            if ((((block % 16) /4) | 0) === 3 && ((block / 16) | 0) === 0) {
                                 if ((this.Tick - x * 2) % 100 === 0) {
                                     for ( i = 0; i < 8; i++) {
-                                        this.AddSprite(new Game.Sparkle(this, x * 16 + 8, y * 16 + ((Math.random() * 16) | 0), Math.random() * dir, 0, 0, 1, 5))
+                                        this.AddSprite(new Game.Sparkle(this, x * 16 + 8, y * 16 + ((Math.random() * 16) | 0), Math.random() * direction, 0, 0, 1, 5))
                                     }
                                 }
                             }
@@ -157,8 +160,8 @@ Game.LevelState = class {
         this.SpritesToAdd.length = 0
         this.SpritesToRemove.length = 0
 
-        this.Camera.X = (Game.Character.XOld + (Game.Character.X - Game.Character.XOld) * delta) - 160
-        this.Camera.Y = (Game.Character.YOld + (Game.Character.Y - Game.Character.YOld) * delta) - 120
+        this.Camera.X = (Game.Main.XOld + (Game.Main.X - Game.Main.XOld) * delta) - 160
+        this.Camera.Y = (Game.Main.YOld + (Game.Main.Y - Game.Main.YOld) * delta) - 120
     }
     Draw(context) {
         // draw the level
@@ -191,7 +194,7 @@ Game.LevelState = class {
         context.restore()
 
         this.Layer.Draw(context, this.Camera)
-        this.Layer.DrawExit0(context, this.Camera, Game.Character.WinTime === 0)
+        this.Layer.DrawExit0(context, this.Camera, Game.Main.WinTime === 0)
         
         context.save()
         context.translate(-this.Camera.X, -this.Camera.Y)
@@ -207,7 +210,7 @@ Game.LevelState = class {
         this.DrawStringShadow(context, "Score:", 0, 0)
         this.DrawStringShadow(context, "000000000", 0, 1)
         this.DrawStringShadow(context, "Coins:", 15, 0)
-        this.DrawStringShadow(context, " " + Game.Character.Coins, 15, 1)
+        this.DrawStringShadow(context, " " + Game.Main.Coins, 15, 1)
         this.DrawStringShadow(context, "Time", 34, 0)
         time = this.TimeLeft | 0
         this.DrawStringShadow(context, " " + time, 34, 1)
@@ -218,26 +221,26 @@ Game.LevelState = class {
             this.RenderBlackout(context, 160, 120, t | 0)
         }
 
-        if (Game.Character.WinTime > 0) {
-            t = Game.Character.WinTime + this.Delta
+        if (Game.Main.WinTime > 0) {
+            t = Game.Main.WinTime + this.Delta
             t = t * t * 0.2
 
             if ( t > 900) {
                 this.GoToLevelState = true
             }
 
-            this.RenderBlackout(context, ((Game.Character.XDeathPosition - this.Camera.X) | 0), ((Game.Character.YDeathPosition - this.Camera.Y) | 0), (320 - t) | 0)
+            this.RenderBlackout(context, ((Game.Main.XDeathPosition - this.Camera.X) | 0), ((Game.Main.YDeathPosition - this.Camera.Y) | 0), (320 - t) | 0)
         }
 
-        if (Game.Character.DeathTime > 0) {
-            t = Game.Character.DeathTime + this.Delta
+        if (Game.Main.DeathTime > 0) {
+            t = Game.Main.DeathTime + this.Delta
             t = t * t * 0.1
 
             if ( t > 900) {
                 this.GoToLoseState = true
             }
 
-            this.RenderBlackout(context, ((Game.Character.XDeathPosition - this.Camera.X) | 0), ((Game.Character.YDeathPosition - this.Camera.Y) | 0), (320 - t)  | 0)
+            this.RenderBlackout(context, ((Game.Main.XDeathPosition - this.Camera.X) | 0), ((Game.Main.YDeathPosition - this.Camera.Y) | 0), (320 - t)  | 0)
         }
         
     }
@@ -254,42 +257,42 @@ Game.LevelState = class {
             return
         }
 
-        let xp = [], yp = [], i = 0
+        let xPosition = [], yPosition = [], i = 0
         for (i = 0; i < 16; i++) {
-            xp[i] = x + (Math.cos(i * Math.PI / 15) * radius) | 0
-            yp[i] = y + (Math.sin(i * Math.PI / 15) * radius) | 0
+            xPosition[i] = x + (Math.cos(i * Math.PI / 15) * radius) | 0
+            yPosition[i] = y + (Math.sin(i * Math.PI / 15) * radius) | 0
         }
-        xp[16] = 0
-        yp[16] = y
-        xp[17] = 0
-        yp[17] = 240
-        xp[18] = 320
-        yp[18] = 240
-        xp[19] = 320
-        yp[19] = y
+        xPosition[16] = 0
+        yPosition[16] = y
+        xPosition[17] = 0
+        yPosition[17] = 240
+        xPosition[18] = 320
+        yPosition[18] = 240
+        xPosition[19] = 320
+        yPosition[19] = y
 
         context.fillStyle = `#0000`
         context.beginPath()
-        context.moveTo(xp[19], yp[19])
+        context.moveTo(xPosition[19], yPosition[19])
         for (i = 18; i < 16; i++) {
-            xp[i] = x - (Math.cos(i * Math.PI / 15) * radius) | 0
-            yp[i] = y - (Math.sin(i * Math.PI / 15) * radius) | 0
+            xPosition[i] = x - (Math.cos(i * Math.PI / 15) * radius) | 0
+            yPosition[i] = y - (Math.sin(i * Math.PI / 15) * radius) | 0
         }
-        yp[15] += 5
-        xp[16] = 320
-        yp[16] = y
-        xp[17] = 320
-        yp[17] = 0
-        xp[18] = 0
-        yp[18] = 0
-        xp[19] = 0
-        yp[19] - y
+        yPosition[15] += 5
+        xPosition[16] = 320
+        yPosition[16] = y
+        xPosition[17] = 320
+        yPosition[17] = 0
+        xPosition[18] = 0
+        yPosition[18] = 0
+        xPosition[19] = 0
+        yPosition[19] - y
 
         context.fillStyle = `#0000`
         context.beginPath()
-        context.moveTo(xp[0], yp[0])
-        for (i = 0; i <= xp.length - 1; i++) {
-            context.lineTo(xp[i], yp[i])
+        context.moveTo(xPosition[0], yPosition[0])
+        for (i = 0; i <= xPosition.length - 1; i++) {
+            context.lineTo(xPosition[i], yPosition[i])
         }
         context.closePath()
         context.fill()
@@ -306,13 +309,13 @@ Game.LevelState = class {
         this.Sprites.Remove(sprite)
     }
     Bump(x, y) {
-        let block = this.Level.GetBlock(x, y), xx = 0, yy = 0
-        if ((Game.Tile.behaviors[block & 0xff] & Game.Tile.Bumpable) > 0) {
+        let block = this.Level.GetBlock(x, y)
+        if ((Game.Tile.Behaviors[block & 0xff] & Game.Tile.Bumpable) > 0) {
             this.BumpInto(x, y, - 1)
             this.Level.SetBlock(x, y, 4)
             this.Level.SetBlockData(x, y, 4)
 
-            Game.Character.GetCoin()
+            Game.Main.GetCoin()
             this.AddSprite(new Game.CoinAnimation(this, x, y))
         }
 
@@ -320,7 +323,7 @@ Game.LevelState = class {
     BumpInto(x, y) {
         let block = this.Level.GetBlock(x, y), i = 0
         if (((Game.Tile.Behaviors[block & 0xff])) > 0) {
-            Game.Character.GetCoin()
+            Game.Main.GetCoin()
             this.Level.SetBlock(x, y, 0)
             this.AddSprite(new Game.CoinAnimation(x, y, + 1))
         }
@@ -336,7 +339,7 @@ Game.LevelState = class {
         else {
             if (this.GoToMapState) {
                 //change the second state in levelstate to randomly change background
-                context.ChangeState(new Game.LevelState(this.LevelDifficulty += 1, 0))
+                context.ChangeState(new Game.LevelState(this.LevelDifficulty += 1, Math.floor(Math.random()*2)))
             }
         }
     }
