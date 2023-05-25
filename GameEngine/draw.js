@@ -70,7 +70,8 @@ Engine.Drawer = class {
         //This will sort the sprites on the Z-index
         if (this.Unsorted) {
             this.Unsorted = false
-            this.Objects.sort(function(x1,x2) { return x1.ZOrder - x2.ZOrder})
+            this.Objects.sort(function(x1, x2) { return x1.ZOrder - x2.ZOrder})
+            console.log(this.Objects)
         }
 
         let i = 0

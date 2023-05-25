@@ -15,6 +15,20 @@ Engine.Sprite = class {
 
 Engine.Sprite.prototype = new Engine.Drawable()
 
+Engine.FrameSprite = class {
+	constructor() {
+		this.FrameX = 0
+		this.FrameY = 0
+		this.FrameWidth = 0
+		this.FrameHeight = 0
+	}
+	Draw(context, camera) {
+		context.drawImage(this.Image, this.FrameX, this.FrameY, this.FrameWidth, this.FrameHeight, this.X - camera.X, this.Y - camera.Y, this.FrameWidth, this.FrameHeight);
+	}
+}
+
+Engine.FrameSprite.prototype = new Engine.Sprite()
+
 Engine.SpriteFont = class {
     constructor(strings, image, letterWidth, letterHeight, letters) {
         this.Image = image
@@ -35,20 +49,6 @@ Engine.SpriteFont = class {
 }
 
 Engine.SpriteFont.prototype = new Engine.Drawable()
-
-Engine.FrameSprite = class {
-    constructor() {
-        this.FrameX = 0
-        this.FrameY = 0
-        this.FrameWidth = 0
-        this.FrameHeight = 0
-    }
-    Draw(context, camera) {
-        context.drawImage(this.Image, this.FrameX, this.FrameY, this.FrameWidth, this.FrameHeight, this.X - camera.X, this.Y - camera.Y, this.FrameWidth, this.FrameHeight)
-    }
-}
-
-Engine.FrameSprite.prototype = new Engine.Sprite()
 
 Engine.AnimationSequence = function(startRow, startColumn, endRow, endColumn) {
     this.StartRow = startRow

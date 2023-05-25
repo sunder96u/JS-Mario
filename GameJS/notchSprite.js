@@ -20,11 +20,10 @@ Game.NotchSprite = class {
         this.Image = image
         this.Delta = 0
         this.SpriteTemplate = null
-        this.Layer = 2
+        this.Layer = 1
     }
     Draw(context, camera) {
         let xPixel = 0, yPixel = 0
-        console.log(this.Visible)
         if (!this.Visible) {
             return;
         }

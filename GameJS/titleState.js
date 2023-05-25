@@ -29,11 +29,13 @@ Game.TitleState = class {
         this.Instructions = Game.SpriteCuts.CreateCyanFont()
         this.Instructions.Strings[0] = { String: "How far can you run?", X: 75, Y: 60}
 
+
         this.drawer.Add(backgroundLayer)
 
         Game.GlobalMapState = new Game.LevelState()
         Game.Main = new Game.Character()
         Game.Main.Image = Engine.Resources.Images["character"]
+
     }
     Exit() {
         this.drawer.Clear()

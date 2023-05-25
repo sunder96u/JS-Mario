@@ -1,5 +1,8 @@
 /* Created by Steven Underwood 2023 */
 
+
+
+
 Game.LevelState = class {
     constructor(difficulty, type) {
         this.LevelDifficulty = difficulty
@@ -35,8 +38,10 @@ Game.LevelState = class {
         this.Layer = new Game.LevelRender(this.Level, 320, 240)
         this.Sprites = new Engine.Drawer()
         this.Camera = new Engine.Camera()
+        console.log(this.Camera)
         this.Tick = 0
         this.ShellsToCheck = []
+        this.FireballsToCheck = [];
         this.SpritesToAdd = []
         this.SpritesToRemove = []
         this.FontShadow = Game.SpriteCuts.CreateBlackFont()
@@ -55,7 +60,7 @@ Game.LevelState = class {
 
         this.Sprites.Add(Game.Main)
         this.StartTime = 1
-        this.TimeLeft = 100
+        this.TimeLeft = 200
 
         this.GoToLevelState = false
         this.GoToLoseState = false
@@ -98,7 +103,7 @@ Game.LevelState = class {
             if (sprite !== Game.Main) {
                 xDirection = sprite.X - this.Camera.X
                 yDirection = sprite.Y = this.Camera.Y
-                if (xDirection < -64 || xDirection > 320 + 64 || yDirection < -64 || yDirection > 240 + 64) {
+                if (xDirection < -64 || xDirection > 384 || yDirection < -64 || yDirection > 304) {
                     this.Sprites.RemoveAt(i)
                 }
             }
@@ -116,8 +121,10 @@ Game.LevelState = class {
             this.Layer.Update(delta)
             this.Level.Update()
             this.Tick++
+            console.log(this.Layer)
             for (x = ((this.Camera.X / 16) | 0) - 1; x <= (((this.Camera.X + this.Layer.Width) / 16) | 0) + 1; x++) {
                 for (y = ((this.Camera.Y / 16) | 0) - 1; y <= (((this.Camera.Y + this.Layer.Height) / 16) | 0) + 1; y++) {
+                    
                     direction = 0
                     if (x * 16 + 8 > Game.Main.X + 16) {
                         direction = -1
@@ -126,6 +133,8 @@ Game.LevelState = class {
                         direction = 1
                     }
                     sTemplate = this.Level.GetSpriteTemplate(x, y)
+
+
                     if (sTemplate !== null) {
                         if (sTemplate.LastVisibleTick != this.Tick - 1) {
                             if (sTemplate.Sprite === null || !this.Sprites.Contains(sTemplate.Sprite)) {
@@ -150,6 +159,7 @@ Game.LevelState = class {
                     }
                 }
             }
+            console.log(this.Sprites.Objects)
             for (i = 0; i < this.Sprites.Objects.length; i++) {
                 this.Sprites.Objects[i].Update(delta)
             }
@@ -176,6 +186,7 @@ Game.LevelState = class {
         if (this.Camera.Y < 0) {
             this.Camera.Y = 0
         }
+        
         if (this.Camera.X > this.Level.Width * 16 - 320) {
             this.Camera.X = this.Level.Width * 16 - 320
         }
@@ -191,6 +202,8 @@ Game.LevelState = class {
         for (i = 0; i < this.Sprites.Objects.length; i++) {
             if (this.Sprites.Objects[i].Layer === 0) {
                 this.Sprites.Objects[i].Draw(context, this.Camera)
+            } else {
+                this.Sprites.Objects[i].Draw(context, this.Camera)
             }
         }
         context.restore()
@@ -203,7 +216,7 @@ Game.LevelState = class {
         for (i = 0; i < this.Sprites.Objects.Length; i++) {
             if (this.Sprites.Objects[i].Layer === 1) {
                 this.Sprites.Objects[i].Draw(context, this.Camera)
-            }
+            } 
         }
         context.restore()
 
@@ -334,6 +347,7 @@ Game.LevelState = class {
         for (i = 0; t < this.Sprites.Objects.length; i++) {
             this.Sprites.Objects[i].BumpCheck(x, y)
         }
+        console.log(this)
 
     }
     CheckForChange(context) {

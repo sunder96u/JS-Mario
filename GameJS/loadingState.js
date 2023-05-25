@@ -10,7 +10,7 @@ Game.LoadingState = class {
     }
     Enter() {
         // enter the level, load images
-        for (let i = 0; i < 7; i++) {
+        for (let i = 0; i <= 6 ; i++) {
             this.Images[i] = {}
         }
 
@@ -72,7 +72,7 @@ Game.LoadingState = class {
     }
     CheckForChange(context) {
         if (this.ImagesLoaded) {
-            Game.GlobalMapState = new Game.LevelState()
+            Game.GlobalMapState = new Game.LevelState(1, 0)
 
             context.ChangeState(new Game.TitleState())
         }

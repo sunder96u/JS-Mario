@@ -34,78 +34,79 @@ Game.CoinAnimation = class {
 
 Game.CoinAnimation.prototype = new Game.NotchSprite();
 
-Game.FlowerEnemy = class {
-    constructor(world, x, y) {
-        this.Image = Engine.Resources.Images["enemies"]
-        this.World = world
-        this.X = x
-        this.Y = y
-        this.Facing = 1
-        this.Type = Game.Enemy.Spiky
-        this.Winged = false
-        this.NoFireballDeath = false
-        this.XPic = 0
-        this.YPic = 6
-        this.YPicO = 24
-        this.Height = 12
-        this.Width = 2
-        this.YStart = y
-        this.Ya = -8
-        this.Y -= 1
-        this.Layer = 0
-        this.JumpTime = 0
-        this.Tick = 0
+// Game.FlowerEnemy = class {
+//     constructor(world, x, y) {
+//         this.Image = Engine.Resources.Images["enemies"]
+//         this.World = world
+//         this.X = x
+//         this.Y = y
+//         this.Facing = 1
+//         console.log(Game.Enemy)
+//         this.Type = Game.Enemy.Spiky
+//         this.Winged = false
+//         this.NoFireballDeath = false
+//         this.XPic = 0
+//         this.YPic = 6
+//         this.YPicO = 24
+//         this.Height = 12
+//         this.Width = 2
+//         this.YStart = y
+//         this.Ya = -8
+//         this.Y -= 1
+//         this.Layer = 0
+//         this.JumpTime = 0
+//         this.Tick = 0
 
-        let i = 0;
-        for (i = 0; i < 4; i++) {
-            this.Move()
-        }
-    }
-    Move() {
-        let i = 0, xd = 0;
-        if (this.DeadTime > 0) {
-            this.DeadTime--
+//         let i = 0;
+//         for (i = 0; i < 4; i++) {
+//             this.Move()
+//         }
+//     }
+//     Move() {
+//         let i = 0, xd = 0;
+//         if (this.DeadTime > 0) {
+//             this.DeadTime--
 
-            if (this.DeadTime === 0) {
-                this.DeadTime = 1
-                for (i = 0; i < 8; i++) {
-                    this.World.AddSprite(new Game.Sparkle(((this.X + Math.random() * 16 - 8) | 0) + 4, ((this.Y + Math.random() * 8) | 0) + 4, Math.random() * 2 - 1, Math.random() * -1, 0, 1, 5));
-                }
-                this.World.RemoveSprite(this)
-            }
+//             if (this.DeadTime === 0) {
+//                 this.DeadTime = 1
+//                 for (i = 0; i < 8; i++) {
+//                     this.World.AddSprite(new Game.Sparkle(((this.X + Math.random() * 16 - 8) | 0) + 4, ((this.Y + Math.random() * 8) | 0) + 4, Math.random() * 2 - 1, Math.random() * -1, 0, 1, 5));
+//                 }
+//                 this.World.RemoveSprite(this)
+//             }
 
-            this.X += this.Xa
-            this.Y += this.Ya
-            this.Ya *= 0.95
-            this.Ya += 1
+//             this.X += this.Xa
+//             this.Y += this.Ya
+//             this.Ya *= 0.95
+//             this.Ya += 1
 
-            return
-        }
+//             return
+//         }
 
-        this.Tick++
+//         this.Tick++
 
-        if (this.Y >= this.YStart) {
-            this.YStart = this.Y;
-            xd = Math.abs(Game.Mario.X - this.X) | 0
-            this.JumpTime++
-            if (this.JumpTime > 40 && xd > 24) {
-                this.Ya = -8
-            } else {
-                this.Ya = 0
-            }
-        } else {
-            this.JumpTime = 0
-        }
+//         if (this.Y >= this.YStart) {
+//             this.YStart = this.Y;
+//             xd = Math.abs(Game.Mario.X - this.X) | 0
+//             this.JumpTime++
+//             if (this.JumpTime > 40 && xd > 24) {
+//                 this.Ya = -8
+//             } else {
+//                 this.Ya = 0
+//             }
+//         } else {
+//             this.JumpTime = 0
+//         }
 
-        this.Y += this.Ya
-        this.Ya *= 0.9
-        this.Ya += 0.1
+//         this.Y += this.Ya
+//         this.Ya *= 0.9
+//         this.Ya += 0.1
 
-        this.XPic = (((this.Tick / 2) | 0) & 1) * 2 + (((this.Tick / 6) | 0) & 1);
-    }
-}
+//         this.XPic = (((this.Tick / 2) | 0) & 1) * 2 + (((this.Tick / 6) | 0) & 1);
+//     }
+// }
 
-Game.FlowerEnemy.prototype = new Game.Enemy()
+// Game.FlowerEnemy.prototype = new Game.Enemy()
 
 Game.Particle = class {
 	constructor(world, x, y, xa, ya, xPic, yPic) {

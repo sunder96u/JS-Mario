@@ -461,9 +461,6 @@ Game.LevelGenerator = class {
             if (xTube >= x0 + length - 2) {
                 xTube += 10
             }
-            if (x === xTube && ((Math.random() * 11) | 0) < this.Difficulty + 1) {
-                level.SetSpriteTemplate(x, tubeHeight, new Game.SpriteTemplate(Game.Enemy.Flower, false))
-            }
 
             for (y = 0; y < this.Height; y++) {
                 if (y >= floor) {
