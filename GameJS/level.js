@@ -153,7 +153,7 @@ Game.Tile = {
 
 Game.LevelType = {
     Overworld: 0,
-    Underground: 1
+    Underworld: 1
 }
 
 Game.Odds = {

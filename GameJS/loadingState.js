@@ -72,7 +72,7 @@ Game.LoadingState = class {
     }
     CheckForChange(context) {
         if (this.ImagesLoaded) {
-            Game.GlobalMapState = new Game.LevelState(1, 0)
+            Game.GlobalMapState = new Game.LevelState()
 
             context.ChangeState(new Game.TitleState())
         }

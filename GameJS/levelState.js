@@ -3,6 +3,7 @@
 Game.LevelState = class {
     constructor(difficulty, type) {
         this.LevelDifficulty = difficulty
+        console.log(this.LevelDifficulty)
         this.LevelType = type
         this.Level = null
         this.Layer = null
@@ -154,7 +155,6 @@ Game.LevelState = class {
                 this.Sprites.Objects[i].CollideCheck()
             }
         }
-
         this.Sprites.AddRange(this.SpritesToAdd)
         this.Sprites.RemoveList(this.SpritesToRemove)
         this.SpritesToAdd.length = 0
@@ -166,7 +166,7 @@ Game.LevelState = class {
     Draw(context) {
         // draw the level
         let i = 0, time = 0, t = 0
-        // loosing the camera, need to grab it
+
         if (this.Camera.X < 0) {
             this.Camera.X = 0
         }
@@ -185,7 +185,6 @@ Game.LevelState = class {
         }
         context.save()
         context.translate(-this.Camera.X, -this.Camera.Y)
-
         for (i = 0; i < this.Sprites.Objects.length; i++) {
             if (this.Sprites.Objects[i].Layer === 0) {
                 this.Sprites.Objects[i].Draw(context, this.Camera)
@@ -208,11 +207,14 @@ Game.LevelState = class {
         this.Layer.DrawExit1(context, this.Camera)
 
         this.DrawStringShadow(context, "Score:", 0, 0)
-        this.DrawStringShadow(context, "000000000", 0, 1)
+        this.DrawStringShadow(context, " " + Game.Main.Score, 0, 1)
         this.DrawStringShadow(context, "Coins:", 15, 0)
         this.DrawStringShadow(context, " " + Game.Main.Coins, 15, 1)
         this.DrawStringShadow(context, "Time", 34, 0)
         time = this.TimeLeft | 0
+        if (time < 0) {
+            time = 0
+        }
         this.DrawStringShadow(context, " " + time, 34, 1)
 
         if (this.StartTime > 0) {
@@ -297,8 +299,6 @@ Game.LevelState = class {
         context.closePath()
         context.fill()
 
-
-
     }
     AddSprite(sprite) {
         // add sprite 
@@ -339,7 +339,7 @@ Game.LevelState = class {
         else {
             if (this.GoToLevelState) {
                 //change the second state in levelstate to randomly change background
-                context.ChangeState(new Game.LevelState(this.LevelDifficulty += 1, Math.floor(Math.random()*1)))
+                context.ChangeState(new Game.LevelState(this.LevelDifficulty += 1, 0))
             }
         }
     }
