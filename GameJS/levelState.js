@@ -1,7 +1,6 @@
-/* Created by Steven Underwood 2023 */
-
-
-
+/* Created using https://openhtml5games.github.io/games-mirror/dist/mariohtml5/main.html for game engine constructors
+    code by Steven Underwood 2023
+*/
 
 Game.LevelState = class {
     constructor(difficulty, type) {
@@ -77,7 +76,7 @@ Game.LevelState = class {
         this.ShellsToCheck.push(shell)
     }
     Update(delta) {
-        let i = 0, xd = 0, yd = 0, sprite = null, x = 0, y = 0, dir = 0, st = null, b = 0;
+        let i = 0, xDirection = 0, yDirection = 0, sprite = null, x = 0, y = 0, dir = 0, st = null, b = 0;
 
         this.Delta = delta;
 
@@ -103,9 +102,9 @@ Game.LevelState = class {
 
             sprite = this.Sprites.Objects[i];
             if (sprite !== Game.Main) {
-                xd = sprite.X - this.Camera.X;
-                yd = sprite.Y - this.Camera.Y;
-                if (xd < -64 || xd > 320 + 64 || yd < -64 || yd > 240 + 64) {
+                xDirection = sprite.X - this.Camera.X;
+                yDirection = sprite.Y - this.Camera.Y;
+                if (xDirection < -64 || xDirection > 320 + 64 || yDirection < -64 || yDirection > 240 + 64) {
                     this.Sprites.RemoveAt(i);
                 }
             }
@@ -251,7 +250,7 @@ Game.LevelState = class {
                 this.GoToLevelState = true;
             }
 
-            this.RenderBlackout(context, ((Game.Main.XDeathPos - this.Camera.X) | 0), ((Game.Main.YDeathPos - this.Camera.Y) | 0), (320 - t) | 0);
+            this.RenderBlackout(context, ((Game.Main.xDirectioneathPos - this.Camera.X) | 0), ((Game.Main.yDirectioneathPos - this.Camera.Y) | 0), (320 - t) | 0);
         }
 
         if (Game.Main.DeathTime > 0) {
@@ -264,7 +263,7 @@ Game.LevelState = class {
 
             }
 
-            this.RenderBlackout(context, ((Game.Main.XDeathPos - this.Camera.X) | 0), ((Game.Main.YDeathPos - this.Camera.Y) | 0), (320 - t) | 0);
+            this.RenderBlackout(context, ((Game.Main.xDirectioneathPos - this.Camera.X) | 0), ((Game.Main.yDirectioneathPos - this.Camera.Y) | 0), (320 - t) | 0);
         }
         
     }

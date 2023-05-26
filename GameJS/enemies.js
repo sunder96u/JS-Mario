@@ -1,6 +1,5 @@
-/**
-	A generic template for an enemy in the game.
-	Code by Rob Kleffner, 2011
+/* Created using https://openhtml5games.github.io/games-mirror/dist/mariohtml5/main.html for game engine constructors
+    code by Steven Underwood 2023
 */
 
 Game.Enemy = function(world, x, y, dir, type, winged) {
@@ -280,9 +279,9 @@ Game.Enemy.prototype.ShellCollideCheck = function(shell) {
         return false;
     }
     
-    let xd = shell.X - this.X, yd = shell.Y - this.Y;
-    if (xd > -16 && xd < 16) {
-        if (yd > -this.Height && yd < shell.Height) {
+    let xDirection = shell.X - this.X, yDirection = shell.Y - this.Y;
+    if (xDirection > -16 && xDirection < 16) {
+        if (yDirection > -this.Height && yDirection < shell.Height) {
             // Engine.Resources.PlaySound("kick");
             
             this.Xa = shell.Facing * 2;
@@ -634,9 +633,9 @@ Game.Shell.prototype.ShellCollideCheck = function(shell) {
         return false;
     }
     
-    let xD = shell.X - this.X, yD = shell.Y - this.Y;
-    if (xD > -16 && xD < 16) {
-        if (yD > -this.Height && yD < shell.Height) {
+    let xDirection = shell.X - this.X, yDirection = shell.Y - this.Y;
+    if (xDirection > -16 && xDirection < 16) {
+        if (yDirection > -this.Height && yDirection < shell.Height) {
             // Engine.Resources.PlaySound("kick");
             if (Game.Main.Carried === shell || Game.Main.Carried === this) {
                 Game.Main.Carried = null;
