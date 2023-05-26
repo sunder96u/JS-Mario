@@ -70,9 +70,9 @@ Game.Background = class {
         }
     }
     GenerateUnderworld(level) {
-        var x = 0, y = 0, t = 0, yy = 0;
+        let x = 0, y = 0, t = 0, yy = 0;
         if (this.Distant) {
-            var tt = 0;
+            let tt = 0;
             for (x = 0; x < this.Width; x++) {
                 if (Math.random() < 0.75) { tt = 1 - tt; }
 

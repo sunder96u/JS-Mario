@@ -387,7 +387,8 @@ Game.Character = function() {
     this.World = null
     this.Facing = 0
     
-    this.XDeathPos = 0; this.YDeathPos = 0
+    this.XDeathPos = 0
+    this.YDeathPos = 0
     this.DeathTime = 0
     this.WinTime = 0
     this.InvulnerableTime = 0
@@ -404,11 +405,12 @@ Game.Character = function() {
 Game.Character.prototype = new Game.NotchSprite(null)
 
 Game.Character.prototype.Initialize = function(world) {
+    
     this.World = world
     this.X = 32
     this.Y = 0
 	this.PowerUpTime = 0
-    
+
     //non static variables in Notch's code
     this.RunTime = 0
     this.WasOnGround = false
@@ -425,7 +427,7 @@ Game.Character.prototype.Initialize = function(world) {
     this.Height = 24
     
     //Level scene
-    this.World = world
+    // this.World = world
     this.Facing = 0
     this.PowerUpTime = 0
     

@@ -71,7 +71,6 @@ Engine.Drawer = class {
         if (this.Unsorted) {
             this.Unsorted = false
             this.Objects.sort(function(x1, x2) { return x1.ZOrder - x2.ZOrder})
-            console.log(this.Objects)
         }
 
         let i = 0
