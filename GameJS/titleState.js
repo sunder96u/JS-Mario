@@ -15,8 +15,9 @@ Game.TitleState = class {
         this.camera = new Engine.Camera()
 
         let backgroundGenerator = new Game.Background(2048, 15, true, Game.LevelType.Underground)
-        let backgroundLayer = new Game.BackgroundRender(backgroundGenerator.CreateLevel(), 320, 240, 1)
+        let backgroundLayer0 = new Game.BackgroundRender(backgroundGenerator.CreateLevel(), 320, 240, 2)
         backgroundGenerator.SetValues(2048, 15, false, Game.LevelType.Underground)
+        let backgroundLayer1 = new Game.BackgroundRender(backgroundGenerator.CreateLevel(), 320, 240, 1)
 
         this.title = new Engine.Sprite()
         this.title.Image = Engine.Resources.Images["title"]
@@ -32,7 +33,8 @@ Game.TitleState = class {
         this.Instructions.Strings[0] = { String: "How far can you run?", X: 75, Y: 60}
 
 
-        this.drawer.Add(backgroundLayer)
+        this.drawer.Add(backgroundLayer0)
+        this.drawer.Add(backgroundLayer1)
 
         Game.GlobalMapState = new Game.LevelState()
         Game.Main = new Game.Character()
@@ -58,7 +60,7 @@ Game.TitleState = class {
     }
     CheckForChange(context) {
         if (Engine.KeyInput.IsKeyDown(Engine.Keys.Space)) {
-            context.ChangeState(new Game.LevelState(2, 1))
+            context.ChangeState(new Game.LevelState(Math.floor(Math.random() * 9), Math.floor(Math.random() * 2)))
         }
     }
 }
