@@ -5,19 +5,34 @@
 // Creates the title screen
 
 Game.TitleState = class {
-    constructor() {
+    constructor(rng) {
         this.draw = null
         this.camera = null
         this.font = null
+        this.Rng = rng
     }
     Enter() {
         this.drawer = new Engine.Drawer()
         this.camera = new Engine.Camera()
 
-        let backgroundGenerator = new Game.Background(2048, 15, true, Game.LevelType.Underground)
-        let backgroundLayer0 = new Game.BackgroundRender(backgroundGenerator.CreateLevel(), 320, 240, 2)
-        backgroundGenerator.SetValues(2048, 15, false, Game.LevelType.Underground)
-        let backgroundLayer1 = new Game.BackgroundRender(backgroundGenerator.CreateLevel(), 320, 240, 1)
+        let backgroundLayer0 = ""
+        let backgroundLayer1 = ""
+        console.log(this.Rng)
+        if (this.Rng < 5) {
+            console.log('should be overground')
+            let  backgroundGenerator = new Game.Background(2048, 15, true, Game.LevelType.Overground)
+            backgroundLayer0 = new Game.BackgroundRender(backgroundGenerator.CreateLevel(), 320, 240, 2)
+            backgroundGenerator.SetValues(2048, 15, false, Game.LevelType.Overground)
+            backgroundLayer1 = new Game.BackgroundRender(backgroundGenerator.CreateLevel(), 320, 240, 1)
+        } else {
+            console.log('should be underground')
+            let backgroundGenerator = new Game.Background(2048, 15, true, Game.LevelType.Underground)
+            backgroundLayer0 = new Game.BackgroundRender(backgroundGenerator.CreateLevel(), 320, 240, 2)
+            backgroundGenerator.SetValues(2048, 15, false, Game.LevelType.Underground)
+            backgroundLayer1 = new Game.BackgroundRender(backgroundGenerator.CreateLevel(), 320, 240, 1)
+        }
+
+
 
         this.title = new Engine.Sprite()
         this.title.Image = Engine.Resources.Images["title"]

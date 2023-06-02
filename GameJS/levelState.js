@@ -354,7 +354,7 @@ Game.LevelState = class {
     }
     CheckForChange(context) {
         if (this.GotoLoseState) {
-            context.ChangeState(new Game.TitleState());
+            context.ChangeState(new Game.TitleState(Math.floor(Math.random()*10)));
         }
         else {
             if (this.GotoMapState) {

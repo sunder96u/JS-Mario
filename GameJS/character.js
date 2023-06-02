@@ -162,7 +162,7 @@ Game.Character.prototype.Move = function() {
             this.Facing = 1
         }
         
-        if (Math.floor(this.X) % 5 === 0) {
+        if (Math.floor(this.X) % 2 === 0) {
             console.log(this.X)
             this.Score += 1
         }
