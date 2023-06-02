@@ -4,79 +4,78 @@
 
 Game.LevelState = class {
     constructor(difficulty, type) {
-        this.LevelDifficulty = difficulty
-        console.log(this.LevelDifficulty)
-        this.LevelType = type
-        this.Level = null
-        this.Layer = null
-        this.BackgroundLayer = []
+        this.LevelDifficulty = difficulty;
+        this.LevelType = type;
+        this.Level = null;
+        this.Layer = null;
+        this.BgLayer = [];
 
-        this.Paused = false
-        this.Sprites = null
-        this.SpritesToAdd = null
-        this.SpritesToRemove = null
-        this.Camera = null
-        
-        this.FontShadow = null
-        this.Font = null
+        this.Paused = false;
+        this.Sprites = null;
+        this.SpritesToAdd = null;
+        this.SpritesToRemove = null;
+        this.Camera = null;
 
-        this.TimeLeft = 0
-        this.StartTime = 0
-        this.Tick = 0
+        this.FontShadow = null;
+        this.Font = null;
 
-        this.Delta = 0
+        this.TimeLeft = 0;
+        this.StartTime = 0;
+        this.Tick = 0;
 
-        this.GoToLevelState = false
-        this.GoToLoseState = false
+        this.Delta = 0;
+
+        this.GotoMapState = false;
+        this.GotoLoseState = false;
     }
     Enter() {
-        // entering the level
-        let levelGenerator = new Game.LevelGenerator(320, 15), i = 0, scrollSpeed = 0, width = 0, height = 0, backgroundLevelGenerator = null
-        this.Level = levelGenerator.CreateLevel(this.LevelType, this.LevelDifficulty)
-        this.Paused = false
-        this.Layer = new Game.LevelRender(this.Level, 320, 240)
-        this.Sprites = new Engine.Drawer()
-        this.Camera = new Engine.Camera()
-        this.Tick = 0
-        this.ShellsToCheck = []
-        this.FireballsToCheck = [];
-        this.SpritesToAdd = []
-        this.SpritesToRemove = []
-        this.FontShadow = Game.SpriteCuts.CreateBlackFont()
-        this.Font = Game.SpriteCuts.CreateWhiteFont()
+        var levelGenerator = new Game.LevelGenerator(320, 15), i = 0, scrollSpeed = 0, w = 0, h = 0, bgLevelGenerator = null;
+        this.Level = levelGenerator.CreateLevel(this.LevelType, this.LevelDifficulty);
 
-        for ( i = 0; i < 2; i++) {
-            scrollSpeed = 4 >> i
-            width = ((((this.Level.Width * 16) - 320) / scrollSpeed) | 0) + 320
-            height = ((((this.Level.Height * 16) - 240) / scrollSpeed) | 0) + 240
-            backgroundLevelGenerator = new Game.Background(width / 32 + 1, height / 32 + 1, i === 0, this.LevelType)
-            this.BackgroundLayer[i] = new Game.BackgroundRender(backgroundLevelGenerator.CreateLevel(), 320, 240, scrollSpeed)
-    
+        this.Paused = false;
+        this.Layer = new Game.LevelRenderer(this.Level, 320, 240);
+        this.Sprites = new Engine.Drawer();
+        this.Camera = new Engine.Camera();
+        this.Tick = 0;
+
+        this.ShellsToCheck = [];
+        this.SpritesToAdd = [];
+        this.SpritesToRemove = [];
+
+        this.FontShadow = Game.SpriteCuts.CreateBlackFont();
+        this.Font = Game.SpriteCuts.CreateWhiteFont();
+
+        for (i = 0; i < 2; i++) {
+            scrollSpeed = 4 >> i;
+            w = ((((this.Level.Width * 16) - 320) / scrollSpeed) | 0) + 320;
+            h = ((((this.Level.Height * 16) - 240) / scrollSpeed) | 0) + 240;
+            bgLevelGenerator = new Game.Background(w / 32 + 1, h / 32 + 1, i === 0, this.LevelType);
+            this.BgLayer[i] = new Game.BackgroundRender(bgLevelGenerator.CreateLevel(), 320, 240, scrollSpeed);
         }
 
-        Game.Main.Initialize(this)
-        this.Sprites.Add(Game.Main)
-        this.StartTime = 1
-        this.TimeLeft = 200
+        Game.Main.Initialize(this);
+        this.Sprites.Add(Game.Main);
+        this.StartTime = 1;
+        this.TimeLeft = 200;
 
-        this.GoToLevelState = false
-        this.GoToLoseState = false
+        this.GotoMapState = false;
+        this.GotoLoseState = false;
     }
     Exit() {
-        // exiting the level (clear canvas)
-        delete this.Level
-        delete this.Layer
-        delete this.BackgroundLayer
-        delete this.Sprites
-        delete this.Camera
-        delete this.FontShadow
-        delete this.Font
+
+        delete this.Level;
+        delete this.Layer;
+        delete this.BgLayer;
+        delete this.Sprites;
+        delete this.Camera;
+        delete this.FontShadow;
+        delete this.Font;
     }
     CheckShellCollide(shell) {
-        this.ShellsToCheck.push(shell)
+        this.ShellsToCheck.push(shell);
     }
     Update(delta) {
-        let i = 0, xDirection = 0, yDirection = 0, sprite = null, x = 0, y = 0, dir = 0, st = null, b = 0;
+        let i = 0, xd = 0, yd = 0, sprite = null, x = 0, y = 0, dir = 0, st = null, b = 0;
 
         this.Delta = delta;
 
@@ -102,9 +101,9 @@ Game.LevelState = class {
 
             sprite = this.Sprites.Objects[i];
             if (sprite !== Game.Main) {
-                xDirection = sprite.X - this.Camera.X;
-                yDirection = sprite.Y - this.Camera.Y;
-                if (xDirection < -64 || xDirection > 320 + 64 || yDirection < -64 || yDirection > 240 + 64) {
+                xd = sprite.X - this.Camera.X;
+                yd = sprite.Y - this.Camera.Y;
+                if (xd < -64 || xd > 320 + 64 || yd < -64 || yd > 240 + 64) {
                     this.Sprites.RemoveAt(i);
                 }
             }
@@ -161,6 +160,7 @@ Game.LevelState = class {
                     }
                 }
             }
+            
             for (i = 0; i < this.Sprites.Objects.length; i++) {
                 this.Sprites.Objects[i].Update(delta);
             }
@@ -179,7 +179,6 @@ Game.LevelState = class {
         this.Camera.Y = (Game.Main.YOld + (Game.Main.Y - Game.Main.YOld) * delta) - 120;
     }
     Draw(context) {
-        // draw the level
         var i = 0, time = 0, t = 0;
 
         if (this.Camera.X < 0) {
@@ -196,7 +195,7 @@ Game.LevelState = class {
         }
 
         for (i = 0; i < 2; i++) {
-            this.BackgroundLayer[i].Draw(context, this.Camera);
+            this.BgLayer[i].Draw(context, this.Camera);
         }
 
         context.save();
@@ -224,7 +223,7 @@ Game.LevelState = class {
 
         this.Layer.DrawExit1(context, this.Camera);
 
-        this.DrawStringShadow(context, "MARIO " + Game.Main.Lives, 0, 0);
+        this.DrawStringShadow(context, "Main " + Game.Main.Lives, 0, 0);
         this.DrawStringShadow(context, " " + Game.Main.Score, 0, 1);
         this.DrawStringShadow(context, "COIN", 16, 0);
         this.DrawStringShadow(context, " " + Game.Main.Coins, 16, 1);
@@ -247,10 +246,10 @@ Game.LevelState = class {
 
             if (t > 900) {
                 //TODO: goto map state with level won
-                this.GoToLevelState = true;
+                this.GotoMapState = true;
             }
 
-            this.RenderBlackout(context, ((Game.Main.xDirectioneathPos - this.Camera.X) | 0), ((Game.Main.yDirectioneathPos - this.Camera.Y) | 0), (320 - t) | 0);
+            this.RenderBlackout(context, ((Game.Main.XDeathPos - this.Camera.X) | 0), ((Game.Main.YDeathPos - this.Camera.Y) | 0), (320 - t) | 0);
         }
 
         if (Game.Main.DeathTime > 0) {
@@ -259,122 +258,110 @@ Game.LevelState = class {
 
             if (t > 900) {
                 //TODO: goto map with level lost
-                this.GoToLoseState = true;
+                this.GotoLoseState = true;
 
             }
 
-            this.RenderBlackout(context, ((Game.Main.xDirectioneathPos - this.Camera.X) | 0), ((Game.Main.yDirectioneathPos - this.Camera.Y) | 0), (320 - t) | 0);
+            this.RenderBlackout(context, ((Game.Main.XDeathPos - this.Camera.X) | 0), ((Game.Main.YDeathPos - this.Camera.Y) | 0), (320 - t) | 0);
         }
-        
     }
     DrawStringShadow(context, string, x, y) {
-        // shadow on string text
-        this.Font.Strings[0] = {String: string, X: x * 8 + 4, Y: y * 8 + 4}
-        this.FontShadow.Strings[0] = { String: string, X: x * 8 + 5, Y: y * 8 + 5}
-        this.FontShadow.Draw(context, this.Camera)
-        this.Font.Draw(context, this.Camera)
+        this.Font.Strings[0] = { String: string, X: x * 8 + 4, Y: y * 8 + 4 };
+        this.FontShadow.Strings[0] = { String: string, X: x * 8 + 5, Y: y * 8 + 5 };
+        this.FontShadow.Draw(context, this.Camera);
+        this.Font.Draw(context, this.Camera);
     }
     RenderBlackout(context, x, y, radius) {
-        // black screen when character dies
-        if (radius > 320) {
-            return;
-        }
-
-        var xp = [], yp = [], i = 0;
-        for (i = 0; i < 16; i++) {
-            xp[i] = x + (Math.cos(i * Math.PI / 15) * radius) | 0;
-            yp[i] = y + (Math.sin(i * Math.PI / 15) * radius) | 0;
-        }
-        xp[16] = 0;
-        yp[16] = y;
-        xp[17] = 0;
-        yp[17] = 240;
-        xp[18] = 320;
-        yp[18] = 240;
-        xp[19] = 320;
-        yp[19] = y;
-
-        context.fillStyle = "#000";
-        context.beginPath();
-        context.moveTo(xp[19], yp[19]);
-        for (i = 18; i >= 0; i--) {
-            context.lineTo(xp[i], yp[i]);
-        }
-        context.closePath();
-        context.fill();
-
-        for (i = 0; i < 16; i++) {
-            xp[i] = x - (Math.cos(i * Math.PI / 15) * radius) | 0;
-            yp[i] = y - (Math.sin(i * Math.PI / 15) * radius) | 0;
-        }
-        //cure a strange problem where the circle gets cut
-        yp[15] += 5;
-
-        xp[16] = 320;
-        yp[16] = y;
-        xp[17] = 320;
-        yp[17] = 0;
-        xp[18] = 0;
-        yp[18] = 0;
-        xp[19] = 0;
-        yp[19] = y;
-
-        context.fillStyle = "#000";
-        context.beginPath();
-        context.moveTo(xp[0], yp[0]);
-        for (i = 0; i <= xp.length - 1; i++) {
-            context.lineTo(xp[i], yp[i]);
-        }
-        context.closePath();
-        context.fill();
-
+                // black screen when Main dies
+                if (radius > 320) {
+                    return;
+                }
+        
+                var xp = [], yp = [], i = 0;
+                for (i = 0; i < 16; i++) {
+                    xp[i] = x + (Math.cos(i * Math.PI / 15) * radius) | 0;
+                    yp[i] = y + (Math.sin(i * Math.PI / 15) * radius) | 0;
+                }
+                xp[16] = 0;
+                yp[16] = y;
+                xp[17] = 0;
+                yp[17] = 240;
+                xp[18] = 320;
+                yp[18] = 240;
+                xp[19] = 320;
+                yp[19] = y;
+        
+                context.fillStyle = "#000";
+                context.beginPath();
+                context.moveTo(xp[19], yp[19]);
+                for (i = 18; i >= 0; i--) {
+                    context.lineTo(xp[i], yp[i]);
+                }
+                context.closePath();
+                context.fill();
+        
+                for (i = 0; i < 16; i++) {
+                    xp[i] = x - (Math.cos(i * Math.PI / 15) * radius) | 0;
+                    yp[i] = y - (Math.sin(i * Math.PI / 15) * radius) | 0;
+                }
+                //cure a strange problem where the circle gets cut
+                yp[15] += 5;
+        
+                xp[16] = 320;
+                yp[16] = y;
+                xp[17] = 320;
+                yp[17] = 0;
+                xp[18] = 0;
+                yp[18] = 0;
+                xp[19] = 0;
+                yp[19] = y;
+        
+                context.fillStyle = "#000";
+                context.beginPath();
+                context.moveTo(xp[0], yp[0]);
+                for (i = 0; i <= xp.length - 1; i++) {
+                    context.lineTo(xp[i], yp[i]);
+                }
+                context.closePath();
+                context.fill();
     }
     AddSprite(sprite) {
-        // add sprite 
-        this.Sprites.Add(sprite)
+        this.Sprites.Add(sprite);
     }
     RemoveSprite(sprite) {
-        // remove sprite
-        this.Sprites.Remove(sprite)
+        this.Sprites.Remove(sprite);
     }
     Bump(x, y) {
-        let block = this.Level.GetBlock(x, y)
-        if ((Game.Tile.Behaviors[block & 0xff] & Game.Tile.Bumpable) > 0) {
-            this.BumpInto(x, y, - 1)
-            this.Level.SetBlock(x, y, 4)
-            this.Level.SetBlockData(x, y, 4)
+        var block = this.Level.GetBlock(x, y);
 
+        if ((Game.Tile.Behaviors[block & 0xff] & Game.Tile.Bumpable) > 0) {
+            this.BumpInto(x, y - 1);
+            this.Level.SetBlock(x, y, 4);
+            this.Level.SetBlockData(x, y, 4);
             Game.Main.GetCoin()
-            console.log(this)
-            this.AddSprite(new Game.CoinAnimation(this, x, y))
         }
 
     }
     BumpInto(x, y) {
-        let block = this.Level.GetBlock(x, y), i = 0
+        var block = this.Level.GetBlock(x, y), i = 0;
         if (((Game.Tile.Behaviors[block & 0xff])) > 0) {
             Game.Main.GetCoin()
             this.Level.SetBlock(x, y, 0)
-            this.AddSprite(new Game.CoinAnimation(x, y, + 1))
         }
         for (i = 0; i < this.Sprites.Objects.length; i++) {
-            this.Sprites.Objects[i].BumpCheck(x, y)
+            this.Sprites.Objects[i].BumpCheck(x, y);
         }
-        console.log(this)
-
     }
     CheckForChange(context) {
-        if (this.GoToLoseState) {
-            context.ChangeState(new Game.TitleState())
+        if (this.GotoLoseState) {
+            context.ChangeState(new Game.TitleState());
         }
         else {
-            if (this.GoToLevelState) {
-                //change the second state in levelstate to randomly change background
-                context.ChangeState(new Game.LevelState(this.LevelDifficulty += 1, Math.floor(Math.random()*2)))
+            if (this.GotoMapState) {
+                context.ChangeState(new Game.LevelState(this.LevelDifficulty += 1, Math.floor(Math.random()*2)));
             }
         }
     }
+};
 
-}
-
-Game.LevelState.prototype = new Engine.GameState()
+Game.LevelState.prototype = new Engine.GameState();

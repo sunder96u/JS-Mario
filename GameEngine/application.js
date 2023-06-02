@@ -24,6 +24,5 @@ Engine.Application = class {
         this.timer.UpdateObject = this
         this.stateContext = new Engine.GameStateContext(defaultState)
         this.timer.Start()
-                
     }
 }

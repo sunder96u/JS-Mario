@@ -2,9 +2,7 @@
     code by Steven Underwood 2023
 */
 
-Engine.Camera = class {
-    constructor() {
-        this.X = 0  // creates offset for drawing sprites 
-        this.Y = 0
-    }
+Engine.Camera = function() {
+	this.X = 0
+	this.Y = 0
 }

@@ -27,20 +27,18 @@ Engine.Collideable = class {
         let bottom1 = (this.Y + this.Height), bottom2 = collision.Y + collision.Height
 
         if (bottom1 < top2) {
-            return;
+            return
         }
         if (top1 > bottom2) {
-            return;
+            return
         }
         if (right1 < left2) {
-            return;
+            return
         }
         if (left1 > right2) {
-            return;
+            return
         }
-
-        //collision, fire the events!
         this.CollisionEvent(collision)
         collision.CollisionEvent(this)
     }
-};
+}

@@ -2,12 +2,12 @@
     code by Steven Underwood 2023
 */
 
-Game.NotchSprite = class {
+Game.GameSprite = class {
     constructor(image) {
         this.XOld = 0
         this.YOld = 0
         this.X = 0
-        this.Y = 200
+        this.Y = 0
         this.Xa = 0
         this.Ya = 0
         this.XPic = 0
@@ -25,9 +25,9 @@ Game.NotchSprite = class {
         this.Layer = 1
     }
     Draw(context, camera) {
-        let xPixel = 0, yPixel = 0
+        var xPixel = 0, yPixel = 0
         if (!this.Visible) {
-            return;
+            return
         }
 
         xPixel = ((this.XOld + (this.X - this.XOld) * this.Delta) | 0) - this.XPicO
@@ -63,13 +63,13 @@ Game.NotchSprite = class {
     }
     CollideCheck() { }
     BumpCheck(xTile, yTile) { }
-    Release(character) { }
+    Release(Main) { }
     ShellCollideCheck(shell) {
         return false
     }
 };
 
-Game.NotchSprite.prototype = new Engine.Drawable()
+Game.GameSprite.prototype = new Engine.Drawable()
 
 
 

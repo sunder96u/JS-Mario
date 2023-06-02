@@ -4,19 +4,19 @@
 
 Game.LoadingState = class {
     constructor() {
-        this.Images = []
-        this.ImagesLoaded = false
-        this.ScreenColor = 0
-        this.ColorDirection = 1
-        this.ImageIndex = 0
+        this.Images = [];
+        this.ImagesLoaded = false;
+        this.ScreenColor = 0;
+        this.ColorDirection = 1;
+        this.ImageIndex = 0;
+        this.SoundIndex = 0;
     }
     Enter() {
-        // enter the level, load images
-        for (let i = 0; i <= 6 ; i++) {
-            this.Images[i] = {}
+        var i = 0;
+        for (i = 0; i < 7; i++) {
+            this.Images[i] = {};
         }
 
-        // set the name and src for each image and spritesheet
         this.Images[0].name = "background"
         this.Images[0].src = "GameAssets/bgsheet.png"
         this.Images[1].name = "enemies"
@@ -32,53 +32,51 @@ Game.LoadingState = class {
         this.Images[6].name = "particles"
         this.Images[6].src = "GameAssets/particlesheet.png"
 
-        Engine.Resources.AddImages(this.Images)
-        
-        Game.Tile.LoadBehaviors()
-
+        Engine.Resources.AddImages(this.Images);
+        Game.Tile.LoadBehaviors();
     }
     Exit() {
-        // clear on exit
-        delete this.Images
+        delete this.Images;
     }
     Update(delta) {
-        // update images
         if (!this.ImagesLoaded) {
-            this.ImagesLoaded = true
-            for(let i = 0; i < this.Images.length; i++) {
-                if (Engine.Resources.Images[this.Images[i].name].complete != true) {
-                    this.ImagesLoaded = false
-                    break
+            this.ImagesLoaded = true;
+            var i = 0;
+            for (i = 0; i < this.Images.length; i++) {
+                if (Engine.Resources.Images[this.Images[i].name].complete !== true) {
+                    this.ImagesLoaded = false;
+                    break;
                 }
             }
         }
 
-        this.ScreenColor += this.ColorDirection * 255 * delta
+        this.ScreenColor += this.ColorDirection * 255 * delta;
         if (this.ScreenColor > 255) {
-            this.ScreenColor = 255
-            this.ColorDirection = -1
+            this.ScreenColor = 255;
+            this.ColorDirection = -1;
         } else if (this.ScreenColor < 0) {
-            this.ScreenColor = 0
-            this.ColorDirection = 1
+            this.ScreenColor = 0;
+            this.ColorDirection = 1;
         }
     }
     Draw(context) {
         if (!this.ImagesLoaded) {
-            let color = parseInt(this.ScreenColor, 10)
-            context.fillStyle = `rgb(${color}, ${color}, ${color})`
-            context.fillRect(0, 0, 640, 480)
+            var color = parseInt(this.ScreenColor, 10);
+            context.fillStyle = "rgb(" + color + "," + color + "," + color + ")";
+            context.fillRect(0, 0, 640, 480);
         } else {
-            context.fillStyle = `rgb(0, 0, 0)`
-            context.fillRect(0, 0, 640, 480)
+            context.fillStyle = "rgb(0, 0, 0)";
+            context.fillRect(0, 0, 640, 480);
         }
     }
     CheckForChange(context) {
         if (this.ImagesLoaded) {
-            Game.GlobalMapState = new Game.LevelState(1, 0)
+            //set up the global map state variable
+            Game.GlobalMapState = new Game.LevelState(1, 0);
 
-            context.ChangeState(new Game.TitleState())
+            context.ChangeState(new Game.TitleState());
         }
     }
 };
 
-Game.LoadingState.prototype = new Engine.GameState()
+Game.LoadingState.prototype = new Engine.GameState();

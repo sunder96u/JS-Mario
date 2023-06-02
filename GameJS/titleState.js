@@ -14,9 +14,9 @@ Game.TitleState = class {
         this.drawer = new Engine.Drawer()
         this.camera = new Engine.Camera()
 
-        let backgroundGenerator = new Game.Background(2048, 15, true, Game.LevelType.Underworld)
+        let backgroundGenerator = new Game.Background(2048, 15, true, Game.LevelType.Underground)
         let backgroundLayer = new Game.BackgroundRender(backgroundGenerator.CreateLevel(), 320, 240, 1)
-        backgroundGenerator.SetValues(2048, 15, false, Game.LevelType.Underworld)
+        backgroundGenerator.SetValues(2048, 15, false, Game.LevelType.Underground)
 
         this.title = new Engine.Sprite()
         this.title.Image = Engine.Resources.Images["title"]
@@ -58,7 +58,7 @@ Game.TitleState = class {
     }
     CheckForChange(context) {
         if (Engine.KeyInput.IsKeyDown(Engine.Keys.Space)) {
-            context.ChangeState(new Game.LevelState(6, 0))
+            context.ChangeState(new Game.LevelState(2, 1))
         }
     }
 }
