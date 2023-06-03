@@ -168,7 +168,7 @@ Game.Odds = {
 
 Game.Level = class {
     constructor(width, height) {
-        this.Width = width;
+        this.Width = width
         this.Height = height;
         this.ExitX = 10;
         this.ExitY = 10;
@@ -254,7 +254,7 @@ Game.Level = class {
 
 Game.LevelGenerator = class {
     constructor(width, height) {
-        this.Width = width*6
+        this.Width = 32700
         this.Height = height;
         this.Odds = [];
         this.TotalOdds = 0;
@@ -267,9 +267,9 @@ Game.LevelGenerator = class {
         this.Type = type;
         this.Difficulty = difficulty;
         this.Odds[Game.Odds.Straight] = 20;
-        this.Odds[Game.Odds.HillStraight] = 100;
-        this.Odds[Game.Odds.Tubes] = 10 + difficulty;
-        this.Odds[Game.Odds.Jump] = 10 * difficulty;
+        this.Odds[Game.Odds.HillStraight] = 20 * difficulty;
+        this.Odds[Game.Odds.Tubes] = 3 + difficulty;
+        this.Odds[Game.Odds.Jump] = 4 * difficulty;
 
         if (this.Type !== Game.LevelType.Overground) {
             this.Odds[Game.Odds.HillStraight] = 0;
@@ -288,7 +288,6 @@ Game.LevelGenerator = class {
         while (length < level.Width - 64) {
             length += this.BuildZone(level, length, level.Width - length);
         }
-
         floor = this.Height - 1 - (Math.random() * 4) | 0;
         level.ExitX = length + 8;
         level.ExitY = floor;
@@ -478,7 +477,6 @@ Game.LevelGenerator = class {
     }
     BuildStraight(level, xo, maxLength, safe) {
         var length = ((Math.random() * 10) | 0) + 2, floor = this.Height - 1 - ((Math.random() * 4) | 0), x = 0, y = 0;
-
         if (safe) {
             length = 10 + ((Math.random() * 5) | 0);
         }
@@ -574,9 +572,7 @@ Game.LevelGenerator = class {
             b[i] = [];
         }
 
-        if (this.Type === Game.LevelType.Castle) {
-            to = 8;
-        } else if (this.Type === Game.LevelType.Underground) {
+        if (this.Type === Game.LevelType.Underground) {
             to = 12;
         }
 
@@ -661,7 +657,7 @@ Game.LevelGenerator = class {
 
 Game.LevelRenderer = class {
     constructor(level, width, height) {
-        this.Width = width;
+        this.Width = width
         this.Height = height;
         this.Level = level;
         this.TilesY = ((height / 16) | 0) + 1;

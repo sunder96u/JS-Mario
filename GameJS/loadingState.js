@@ -75,7 +75,6 @@ Game.LoadingState = class {
             Game.GlobalMapState = new Game.LevelState(1, 0);
 
             context.ChangeState(new Game.TitleState(Math.floor(Math.random() * 10)));
-            console.log(`loading titlestate`)
         }
     }
 };

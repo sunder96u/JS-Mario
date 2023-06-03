@@ -17,15 +17,12 @@ Game.TitleState = class {
 
         let backgroundLayer0 = ""
         let backgroundLayer1 = ""
-        console.log(this.Rng)
         if (this.Rng < 5) {
-            console.log('should be overground')
             let  backgroundGenerator = new Game.Background(2048, 15, true, Game.LevelType.Overground)
             backgroundLayer0 = new Game.BackgroundRender(backgroundGenerator.CreateLevel(), 320, 240, 2)
             backgroundGenerator.SetValues(2048, 15, false, Game.LevelType.Overground)
             backgroundLayer1 = new Game.BackgroundRender(backgroundGenerator.CreateLevel(), 320, 240, 1)
         } else {
-            console.log('should be underground')
             let backgroundGenerator = new Game.Background(2048, 15, true, Game.LevelType.Underground)
             backgroundLayer0 = new Game.BackgroundRender(backgroundGenerator.CreateLevel(), 320, 240, 2)
             backgroundGenerator.SetValues(2048, 15, false, Game.LevelType.Underground)

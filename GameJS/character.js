@@ -163,7 +163,6 @@ Game.Character.prototype.Move = function() {
         }
         
         if (Math.floor(this.X) % 2 === 0) {
-            console.log(this.X)
             this.Score += 1
         }
     }
