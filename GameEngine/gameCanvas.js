@@ -10,8 +10,10 @@ Engine.GameCanvas = class {
         this.BackBufferContext2D = null
     }
     Initialize(canvasId, resWidth, resHeight) {
-        this.Canvas = document.getElementById("canvas") // grab the canvas
+        this.Canvas = document.getElementById("canvas")
         this.Context2D = this.Canvas.getContext("2d") // gets the canvas context
+        this.Canvas.width = resWidth
+        this.Canvas.height = resHeight
         this.BackBuffer = document.createElement("canvas") // creates a second canvas as a backbuffer
         this.BackBuffer.width = resWidth // sets backbuffer width to canvas width
         this.BackBuffer.height = resHeight // sets backbuffer height to canvas height

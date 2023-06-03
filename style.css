@@ -4,3 +4,8 @@ body {
     background-color: black;
     margin: 5rem;
 }
+
+canvas {
+    width: 640px;
+    height: 480px;
+}
