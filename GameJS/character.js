@@ -4,7 +4,6 @@ Game.Character = function() {
     //these are static
     this.Coins = 0
     this.Score = 0
-    this.Lives = 3
     this.LevelString = "none"
     this.GroundInertia = 0.89
     this.AirInertia = 0.89
@@ -17,16 +16,15 @@ Game.Character = function() {
     this.JumpTime = 0
     this.XJumpSpeed = 0
     this.YJumpSpeed = 0
-    
+    //Pixel Width of Sprite
     this.Width = 4
     this.Height = 24
     
     //Level scene
     this.World = null
     this.Facing = 0
-   
     this.XDeathPos = 0
-     this.YDeathPos = 0
+    this.YDeathPos = 0
     this.DeathTime = 0
     this.WinTime = 0
     this.InvulnerableTime = 0
@@ -48,15 +46,13 @@ Game.Character.prototype.Initialize = function(world) {
     this.JumpTime = 0
     this.XJumpSpeed = 0
     this.YJumpSpeed = 0
-    
+    //Sprite Size
     this.Width = 4
     this.Height = 24
-    
     //Level scene
     this.World = world
     this.Facing = 0
-    this.PowerUpTime = 0
-    
+    this.PowerUpTime = 0 
     this.XDeathPos = 0
     this.YDeathPos = 0
     this.DeathTime = 0
@@ -67,7 +63,7 @@ Game.Character.prototype.Initialize = function(world) {
 }
 
 Game.Character.prototype.Blink = function(on) {
-   
+    //Draws the main character sprite   
     this.Image = Engine.Resources.Images["character"]
     this.XPicO = 8
     this.YPicO = 15
@@ -75,13 +71,14 @@ Game.Character.prototype.Blink = function(on) {
 }
 
 Game.Character.prototype.Move = function() {
+    //Sets up win condition
     if (this.WinTime > 0) {
         this.WinTime++
         this.Xa = 0
         this.Ya = 0
         return
     }
-    
+    //Sets up death condition
     if (this.DeathTime > 0) {
         this.DeathTime++
         if (this.DeathTime < 11) {
@@ -96,24 +93,19 @@ Game.Character.prototype.Move = function() {
         this.Y += this.Ya
         return;
     }
-    
     if (this.InvulnerableTime > 0) {
         this.InvulnerableTime--
     }
-    
     this.Visible = (((this.InvulerableTime / 2) | 0) & 1) === 0
-    
     this.WasOnGround = this.OnGround
-    let sideWaysSpeed = (Engine.KeyInput.IsKeyDown(Engine.Keys.S) ? 1.2 : 0.6) || (Engine.KeyInput.IsKeyDown(Engine.Keys.Down) ? 1.2 : 0.6);
-           
+    let sideWaysSpeed = (Engine.KeyInput.IsKeyDown(Engine.Keys.S) ? 1.2 : 0.6) || (Engine.KeyInput.IsKeyDown(Engine.Keys.Down) ? 1.2 : 0.6);           
     if (this.Xa > 2) {
         this.Facing = 1
     }
     if (this.Xa < -2) {
         this.Facing = -1
     }
-    
-    if ((Engine.KeyInput.IsKeyDown(Engine.Keys.W) || Engine.KeyInput.IsKeyDown(Engine.Keys.Up)) || (this.JumpTime < 0 && !this.OnGround && !this.Sliding)) {
+    if ((Engine.KeyInput.IsKeyDown(Engine.Keys.W) || Engine.KeyInput.IsKeyDown(Engine.Keys.Up)) || (this.JumpTime < 0 && !this.OnGround)) {
         if (this.JumpTime < 0) {
             this.Xa = this.XJumpSpeed
             this.Ya = -this.JumpTime * this.YJumpSpeed
@@ -143,7 +135,7 @@ Game.Character.prototype.Move = function() {
         this.JumpTime = 0;
     }
     
-    if ((Engine.KeyInput.IsKeyDown(Engine.Keys.Left) || Engine.KeyInput.IsKeyDown(Engine.Keys.A)) && !this.Ducking) {
+    if ((Engine.KeyInput.IsKeyDown(Engine.Keys.Left) || Engine.KeyInput.IsKeyDown(Engine.Keys.A))) {
         if (this.Facing === 1) {
             this.Sliding = false
         }
@@ -153,7 +145,7 @@ Game.Character.prototype.Move = function() {
         }
     }
     
-    if ((Engine.KeyInput.IsKeyDown(Engine.Keys.Right) || Engine.KeyInput.IsKeyDown(Engine.Keys.D)) && !this.Ducking) {
+    if ((Engine.KeyInput.IsKeyDown(Engine.Keys.Right) || Engine.KeyInput.IsKeyDown(Engine.Keys.D))) {
         if (this.Facing === -1) {
             this.Sliding = false
         }
@@ -167,7 +159,7 @@ Game.Character.prototype.Move = function() {
         }
     }
     
-    if ((!Engine.KeyInput.IsKeyDown(Engine.Keys.Left) && !Engine.KeyInput.IsKeyDown(Engine.Keys.Right)) || (!Engine.KeyInput.IsKeyDown(Engine.Keys.A) && !Engine.KeyInput.IsKeyDown(Engine.Keys.D))|| this.Ducking || this.Ya < 0 || this.OnGround) {
+    if ((!Engine.KeyInput.IsKeyDown(Engine.Keys.Left) && !Engine.KeyInput.IsKeyDown(Engine.Keys.Right)) || (!Engine.KeyInput.IsKeyDown(Engine.Keys.A) && !Engine.KeyInput.IsKeyDown(Engine.Keys.D)) || this.Ya < 0 || this.OnGround) {
         this.Sliding = false  
     }
         

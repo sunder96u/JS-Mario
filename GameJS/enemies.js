@@ -365,7 +365,7 @@ Game.Enemy.prototype.Draw = function(context, camera) {
 //Static variables
 Game.Enemy.RedKoopa = 0
 Game.Enemy.GreenKoopa = 1
-Game.Enemy.Goomba = 2
+Game.Enemy.Galoomba = 2
 Game.Enemy.Spiky = 3
 
 

@@ -56,8 +56,6 @@ Game.LevelState = class {
         Game.Main.Initialize(this);
         this.Sprites.Add(Game.Main);
         this.StartTime = 1;
-        this.TimeLeft = 200;
-
         this.GotoMapState = false;
         this.GotoLoseState = false;
     }
@@ -78,11 +76,6 @@ Game.LevelState = class {
         let i = 0, xd = 0, yd = 0, sprite = null, x = 0, y = 0, dir = 0, st = null, b = 0;
 
         this.Delta = delta;
-
-        this.TimeLeft -= delta;
-        if ((this.TimeLeft | 0) === 0) {
-            Game.Main.Die();
-        }
 
         if (this.StartTime > 0) {
             this.StartTime++;
@@ -223,16 +216,10 @@ Game.LevelState = class {
 
         this.Layer.DrawExit1(context, this.Camera);
 
-        this.DrawStringShadow(context, "Main " + Game.Main.Lives, 0, 0);
+        this.DrawStringShadow(context, "SCORE: ", 0, 0);
         this.DrawStringShadow(context, " " + Game.Main.Score, 0, 1);
-        this.DrawStringShadow(context, "COIN", 16, 0);
-        this.DrawStringShadow(context, " " + Game.Main.Coins, 16, 1);
-        this.DrawStringShadow(context, "TIME", 34, 0);
-        time = this.TimeLeft | 0;
-        if (time < 0) {
-            time = 0;
-        }
-        this.DrawStringShadow(context, " " + time, 34, 1);
+        this.DrawStringShadow(context, "COINS:", 32, 0);
+        this.DrawStringShadow(context, " " + Game.Main.Coins, 32, 1);
 
         if (this.StartTime > 0) {
             t = this.StartTime + this.Delta - 2;

@@ -254,7 +254,7 @@ Game.Level = class {
 
 Game.LevelGenerator = class {
     constructor(width, height) {
-        this.Width = 32700
+        this.Width = 32000
         this.Height = height;
         this.Odds = [];
         this.TotalOdds = 0;
